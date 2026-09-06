@@ -1,5 +1,5 @@
 # # python-dotenv-files
-#.env
+.env
 
 # virtualenv
 venv/
