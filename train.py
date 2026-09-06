@@ -43,7 +43,6 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--data_path', type=str)
     parser.add_argument('--param_file', type=str)
-    parser.add_argument('--data_commit', type=str)
     parser.add_argument('--data_path_gmm_eval_out', type=str, default="", help='Output folder path where rtdc files with'
                                                                            ' predictions on GMM data will be saved')
     parser.add_argument('--data_path_gmm_eval_in', type=str, default="", help='Input folder with GMM rtdc measurements')
@@ -59,7 +58,6 @@ def main():
     #     set_seed(args.seed) # do not use seed, random run
 
     data_absolute_path = pathlib.Path(args.data_path).resolve()
-    data_commit = {"dvc_training_data_commit": args.data_commit}
     params = yaml.safe_load(open(args.param_file))
 
     # use seed from the command line if given, if not use from the configuration file, if not - no seed is used - random run
@@ -206,7 +204,6 @@ def main():
                       )
 
     # log parameters
-    logger.log_params(params=data_commit, filename="configuration.yaml")
     logger.log_params(params=params, filename="configuration.yaml")
 
     print(f"START TIME: {time.ctime()}", flush=True)
