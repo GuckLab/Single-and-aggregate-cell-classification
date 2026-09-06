@@ -6,86 +6,86 @@ create_dataset:
   p99: 0.612
   hdf5_paths:
     train:
-      - 5_train_data_by_class/ml_score_g1b/fl_data/Lena
-      #- 5_train_data_by_class/ml_score_g1b/fl_data
-      - 5_train_data_by_class/ml_score_g1e/fl_data/Lena
-      - 5_train_data_by_class/ml_score_g1e/fl_data/Manu/Leukocyte_stainings/20220908_Manu_LC_Blood_stainings
-      - 5_train_data_by_class/ml_score_g1e/fl_data/Manu/Leukocyte_stainings/20220912_Manu_LC_Blood_stainings
-      - 5_train_data_by_class/ml_score_g1e/fl_data/Manu/Leukocyte_stainings/20220919_Manu_LC_Blood_stainings
-      - 5_train_data_by_class/ml_score_g1e/fl_data/Manu/Leukocyte_stainings/20220926_Manu_LC_Blood_stainings
-      - 5_train_data_by_class/ml_score_g1e/fl_data/Manu/Leukocyte_stainings/20221202_Manu_LC_Blood_stainings
-      - 5_train_data_by_class/ml_score_g1m/fl_data/Manu/Leukocyte_stainings #
-      - 5_train_data_by_class/ml_score_g1m/fl_data/Manu/2nd_round_monocytes_negative # added
-      - 5_train_data_by_class/ml_score_g1m/fl_data/Lena
-#      - 5_train_data_by_class/ml_score_g1m/control
-#      - 5_train_data_by_class/ml_score_g1m/long_covid
-      - 5_train_data_by_class/ml_score_g1n/fl_data/Lena/20230119_01_Mono
-      - 5_train_data_by_class/ml_score_g1n/fl_data/Lena/20230123_02_Mono
-      - 5_train_data_by_class/ml_score_g1n/fl_data/Lena/20230227_09_Mono
-      - 5_train_data_by_class/ml_score_g1n/fl_data/Lena/20230306_11_Mono
-      - 5_train_data_by_class/ml_score_g1n/fl_data/Lena/20230310_13_Mono
-      - 5_train_data_by_class/ml_score_g1n/fl_data/Lena/20230315_15_Mono   # newborn
-      - 5_train_data_by_class/ml_score_g1n/fl_data/Lena/20230414_17_Monos
-      - 5_train_data_by_class/ml_score_g1n/fl_data/Manu/Leukocyte_stainings/20220908_Manu_LC_Blood_stainings/no3_BH425-01_CD14_CD666_CD16
-      - 5_train_data_by_class/ml_score_g1n/fl_data/Manu/Leukocyte_stainings/20220912_Manu_LC_Blood_stainings/no3_BH426-01_CD14_CD666_CD16
-      - 5_train_data_by_class/ml_score_g1n/fl_data/Manu/Leukocyte_stainings/20220919_Manu_LC_Blood_stainings/no2_BH430-01_CD14_CD666_CD16
-      - 5_train_data_by_class/ml_score_g1n/fl_data/Manu/Leukocyte_stainings/20220922_Manu_LC_Blood_stainings/no2_BH208-02_CD14_CD66_CD16
-      - 5_train_data_by_class/ml_score_g1n/fl_data/Manu/Leukocyte_stainings/20220926_Manu_LC_Blood_stainings/no2_BH436-01_CD14_CD66_CD16
-      - 5_train_data_by_class/ml_score_g1n/fl_data/Manu/Leukocyte_stainings/20221202_Manu_LC_Blood_stainings/no2_FR073-01_CD14_CD66_CD16
-      #- 5_train_data_by_class/ml_score_g1n/fl_data/Lena/20230310_13_Neutro #activated looking neutrophils
-      #- 5_train_data_by_class/ml_score_g1n/fl_data/Lena/20230414_17_Neutro #activated looking neutrophils
-      #- 5_train_data_by_class/ml_score_g1n/fl_data/Manu/20221202_Manu_LC_Blood_stainings/no3_FR073_CD15_CD49d #activated looking neutrophils
-      - 5_train_data_by_class/ml_score_l10/fl_data/Manu/Leukocyte_stainings #
-      - 5_train_data_by_class/ml_score_l10/fl_data/Manu/2nd_round_lymphocytes_in_focus # added
-      - 5_train_data_by_class/ml_score_l10/fl_data/Lena
-      - 5_train_data_by_class/ml_score_r1f
-      - 5_train_data_by_class/ml_score_r1u
-      - 5_train_data_by_class/ml_score_r20
-      - 5_train_data_by_class/ml_score_r30
-      #- 5_train_data_by_class/ml_score_rn0
-      #- 5_train_data_by_class/ml_score_mn0/fl_data
-      #- 5_train_data_by_class/ml_score_n10
-      - 5_train_data_by_class/ml_score_r1r
-      - 5_train_data_by_class/ml_score_r1n
-      - 5_train_data_by_class/ml_score_t1f/fl_data
-      - 5_train_data_by_class/ml_score_t1u/fl_data
-      - 5_train_data_by_class/ml_score_t1r/fl_data
-      - 5_train_data_by_class/ml_score_tns/fl_data
-      - 5_train_data_by_class/ml_score_tnl/fl_data
-    #  - 5_train_data_by_class/ml_score_tnm/fl_data
-      - 5_train_data_by_class/ml_score_tnr/fl_data # TODO remove it
-#      - 5_train_data_by_class/ml_score_tnw/fl_data
-#      - 5_train_data_by_class/ml_score_wn0/fl_data
-      - 5_train_data_by_class/ml_score_t1w/fl_data # added
+      - train_data/ml_score_g1b/fl_data/Lena
+      #- train_data/ml_score_g1b/fl_data
+      - train_data/ml_score_g1e/fl_data/Lena
+      - train_data/ml_score_g1e/fl_data/Manu/Leukocyte_stainings/20220908_Manu_LC_Blood_stainings
+      - train_data/ml_score_g1e/fl_data/Manu/Leukocyte_stainings/20220912_Manu_LC_Blood_stainings
+      - train_data/ml_score_g1e/fl_data/Manu/Leukocyte_stainings/20220919_Manu_LC_Blood_stainings
+      - train_data/ml_score_g1e/fl_data/Manu/Leukocyte_stainings/20220926_Manu_LC_Blood_stainings
+      - train_data/ml_score_g1e/fl_data/Manu/Leukocyte_stainings/20221202_Manu_LC_Blood_stainings
+      - train_data/ml_score_g1m/fl_data/Manu/Leukocyte_stainings #
+      - train_data/ml_score_g1m/fl_data/Manu/2nd_round_monocytes_negative # added
+      - train_data/ml_score_g1m/fl_data/Lena
+#      - train_data/ml_score_g1m/control
+#      - train_data/ml_score_g1m/long_covid
+      - train_data/ml_score_g1n/fl_data/Lena/20230119_01_Mono
+      - train_data/ml_score_g1n/fl_data/Lena/20230123_02_Mono
+      - train_data/ml_score_g1n/fl_data/Lena/20230227_09_Mono
+      - train_data/ml_score_g1n/fl_data/Lena/20230306_11_Mono
+      - train_data/ml_score_g1n/fl_data/Lena/20230310_13_Mono
+      - train_data/ml_score_g1n/fl_data/Lena/20230315_15_Mono   # newborn
+      - train_data/ml_score_g1n/fl_data/Lena/20230414_17_Monos
+      - train_data/ml_score_g1n/fl_data/Manu/Leukocyte_stainings/20220908_Manu_LC_Blood_stainings/no3_BH425-01_CD14_CD666_CD16
+      - train_data/ml_score_g1n/fl_data/Manu/Leukocyte_stainings/20220912_Manu_LC_Blood_stainings/no3_BH426-01_CD14_CD666_CD16
+      - train_data/ml_score_g1n/fl_data/Manu/Leukocyte_stainings/20220919_Manu_LC_Blood_stainings/no2_BH430-01_CD14_CD666_CD16
+      - train_data/ml_score_g1n/fl_data/Manu/Leukocyte_stainings/20220922_Manu_LC_Blood_stainings/no2_BH208-02_CD14_CD66_CD16
+      - train_data/ml_score_g1n/fl_data/Manu/Leukocyte_stainings/20220926_Manu_LC_Blood_stainings/no2_BH436-01_CD14_CD66_CD16
+      - train_data/ml_score_g1n/fl_data/Manu/Leukocyte_stainings/20221202_Manu_LC_Blood_stainings/no2_FR073-01_CD14_CD66_CD16
+      #- train_data/ml_score_g1n/fl_data/Lena/20230310_13_Neutro #activated looking neutrophils
+      #- train_data/ml_score_g1n/fl_data/Lena/20230414_17_Neutro #activated looking neutrophils
+      #- train_data/ml_score_g1n/fl_data/Manu/20221202_Manu_LC_Blood_stainings/no3_FR073_CD15_CD49d #activated looking neutrophils
+      - train_data/ml_score_l10/fl_data/Manu/Leukocyte_stainings #
+      - train_data/ml_score_l10/fl_data/Manu/2nd_round_lymphocytes_in_focus # added
+      - train_data/ml_score_l10/fl_data/Lena
+      - train_data/ml_score_r1f
+      - train_data/ml_score_r1u
+      - train_data/ml_score_r20
+      - train_data/ml_score_r30
+      #- train_data/ml_score_rn0
+      #- train_data/ml_score_mn0/fl_data
+      #- train_data/ml_score_n10
+      - train_data/ml_score_r1r
+      - train_data/ml_score_r1n
+      - train_data/ml_score_t1f/fl_data
+      - train_data/ml_score_t1u/fl_data
+      - train_data/ml_score_t1r/fl_data
+      - train_data/ml_score_tns/fl_data
+      - train_data/ml_score_tnl/fl_data
+    #  - train_data/ml_score_tnm/fl_data
+      - train_data/ml_score_tnr/fl_data # TODO remove it
+#      - train_data/ml_score_tnw/fl_data
+#      - train_data/ml_score_wn0/fl_data
+      - train_data/ml_score_t1w/fl_data # added
 
     test:
-      - 5_test_data_by_class/ml_score_g1b/fl_data/Lena
-      - 5_test_data_by_class/ml_score_g1e/fl_data
-      - 5_test_data_by_class/ml_score_g1m/fl_data
-      - 5_test_data_by_class/ml_score_g1n/fl_data/Lena/20230316_16_Mono
-      - 5_test_data_by_class/ml_score_g1n/fl_data/Manu/Leukocyte_stainings/20221130_Manu_LC_Blood_stainings/no2_FR072-01_CD14_CD66_CD16
-      #- 5_test_data_by_class/ml_score_g1n/fl_data/Lena/20230316_16_Neutro #activated looking neutrophils
-      #- 5_test_data_by_class/ml_score_g1n/fl_data/Manu/Leukocyte_stainings/20221130_Manu_LC_Blood_stainings/no3_FR072-01_CD15_CD49d #activated looking neutrophils
-      - 5_test_data_by_class/ml_score_l10/fl_data
-      - 5_test_data_by_class/ml_score_r1f
-      - 5_test_data_by_class/ml_score_r1u
-      - 5_test_data_by_class/ml_score_r20
-      - 5_test_data_by_class/ml_score_r30
-     # - 5_test_data_by_class/ml_score_rn0
-     # - 5_test_data_by_class/ml_score_mn0/fl_data
-      #- 5_test_data_by_class/ml_score_n10
-      - 5_test_data_by_class/ml_score_r1r
-      - 5_test_data_by_class/ml_score_r1n
-      - 5_test_data_by_class/ml_score_t1f/fl_data
-      - 5_test_data_by_class/ml_score_t1u/fl_data
-      - 5_test_data_by_class/ml_score_t1r/fl_data
-      - 5_test_data_by_class/ml_score_tns/fl_data
-      - 5_test_data_by_class/ml_score_tnl/fl_data
-    #  - 5_test_data_by_class/ml_score_tnm/fl_data
-      - 5_test_data_by_class/ml_score_tnr/fl_data
-#      - 5_test_data_by_class/ml_score_tnw/fl_data
-#      - 5_test_data_by_class/ml_score_wn0/fl_data
-      - 5_test_data_by_class/ml_score_t1w/fl_data # added
+      - test_data/ml_score_g1b/fl_data/Lena
+      - test_data/ml_score_g1e/fl_data
+      - test_data/ml_score_g1m/fl_data
+      - test_data/ml_score_g1n/fl_data/Lena/20230316_16_Mono
+      - test_data/ml_score_g1n/fl_data/Manu/Leukocyte_stainings/20221130_Manu_LC_Blood_stainings/no2_FR072-01_CD14_CD66_CD16
+      #- test_data/ml_score_g1n/fl_data/Lena/20230316_16_Neutro #activated looking neutrophils
+      #- test_data/ml_score_g1n/fl_data/Manu/Leukocyte_stainings/20221130_Manu_LC_Blood_stainings/no3_FR072-01_CD15_CD49d #activated looking neutrophils
+      - test_data/ml_score_l10/fl_data
+      - test_data/ml_score_r1f
+      - test_data/ml_score_r1u
+      - test_data/ml_score_r20
+      - test_data/ml_score_r30
+     # - test_data/ml_score_rn0
+     # - test_data/ml_score_mn0/fl_data
+      #- test_data/ml_score_n10
+      - test_data/ml_score_r1r
+      - test_data/ml_score_r1n
+      - test_data/ml_score_t1f/fl_data
+      - test_data/ml_score_t1u/fl_data
+      - test_data/ml_score_t1r/fl_data
+      - test_data/ml_score_tns/fl_data
+      - test_data/ml_score_tnl/fl_data
+    #  - test_data/ml_score_tnm/fl_data
+      - test_data/ml_score_tnr/fl_data
+#      - test_data/ml_score_tnw/fl_data
+#      - test_data/ml_score_wn0/fl_data
+      - test_data/ml_score_t1w/fl_data # added
 
 
 
