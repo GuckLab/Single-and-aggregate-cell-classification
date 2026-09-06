@@ -32,7 +32,8 @@ if __name__ == "__main__":
 
     #evaluate_models(args.model, args.path_in, model_names=["best_model_f1"], batch_size=args.batch_size)
 
-    evaluate_models(args.model, args.path_in, model_names=["best_model_bal_acc"], batch_size=args.batch_size)
+    # TODO bring it back
+    #evaluate_models(args.model, args.path_in, model_names=["best_model_bal_acc"], batch_size=args.batch_size)
 
 
     if args.path_in_gmm:

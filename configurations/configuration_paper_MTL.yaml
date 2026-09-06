@@ -455,7 +455,7 @@ gmm_based_evaluation:
     'ml_score_rbn': ""
     'ml_score_agg': ""
 
-  full_measurement_label: "Full"
+  #full_measurement_label: "Full"
 
   single_cell: False # TODO change it to False
 

@@ -450,7 +450,7 @@ gmm_based_evaluation:
 #    'ml_score_mn0': ""
 
 
-  full_measurement_label: "Full"
+  #full_measurement_label: "Full"
 
   proportions: # proportions to be computed. Lists should contain names of ml codes
     notWBC:

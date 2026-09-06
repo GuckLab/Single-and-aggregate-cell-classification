@@ -314,8 +314,9 @@ def model_eval_on_gmm(path_in, path_out, run_id: str, measurements, ml_score_fea
     artifact_path = mlflow_folder_name + '_' + model_name + "_" + unique_id
 
     # run evaluation of predictions - cell type proportion calculation
-    evaluate_proportions_on_gmm(measurements, ml_score_features, path_out, artifact_path=artifact_path,
-                    full_measurement=full_measurement_label, not_wbc_cell_types=not_wbc_cell_types, wbc_cell_types=wbc_cell_types, single_cell_mode=single_cell)
+    if full_measurement_label:
+        evaluate_proportions_on_gmm(measurements, ml_score_features, path_out, artifact_path=artifact_path,
+                        full_measurement=full_measurement_label, not_wbc_cell_types=not_wbc_cell_types, wbc_cell_types=wbc_cell_types, single_cell_mode=single_cell)
 
     # run evaluation of predictions - confusion matrix, if there is labeled data (measurement_labels in config file)
     if cell_type_naming:
