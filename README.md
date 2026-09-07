@@ -63,7 +63,8 @@ pip install numpy pandas scipy pyyaml python-dotenv mlflow dclab dcnum h5py tabu
 
 ## Setting up the dataset
 
-The accompanying data can be downloaded from [Open Science Framework](https://osf.io/3zkvw/).
+The accompanying data (in .rtdc format) can be downloaded from [Open Science Framework](https://osf.io/3zkvw/).
+The rtdc files be browsed using the [DCscope (formerly Shape-Out)](https://shapeout2.readthedocs.io/) tool.
 
 Place the data in the project folder `data/` (or use another location and pass it via the corresponding arguments when running training or evaluation).
 
