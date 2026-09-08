@@ -90,9 +90,6 @@ python evaluate.py --path_in ./data/ --model model_Run_ID --path_in_gmm ./data/W
 
 Results are tracked in `./mlflowruns/`, as defined in `.env`. You can change the MLflow output path by updating `MLFLOW_TRACKING_URI` in `.env`.
 
-## Results
-
-(Add tables)
 
 
 
