@@ -1,6 +1,6 @@
 # Single-cell-and-aggregate-classification
 
-This repository contains Python code for classifying single blood cells and blood cell aggregates in images acquired with a deformability cytometry device.
+This repository contains Python code for classifying single blood cells and blood cell aggregates in images acquired with a [deformability cytometry](https://mpl.mpg.de/divisions/cell-physics/methods/deformability-cytometry) device.
 
 The repository accompanies the following paper: Zingman et al., *Multi-label versus multi-class classification of blood cells and their aggregates in microfluidic channels* (2026), available on arXiv: [to be added]
 
