@@ -2,27 +2,6 @@ import torch
 import torch.nn as nn
 from torchvision import models
 
-
-# def efficientnet_b0(pretrained: bool, num_classes: int):
-#     Commented out during cleanup: not selected by current YAML architectures.
-
-
-# def efficientnet_b0_1(pretrained: bool, num_classes: int):
-#     Commented out during cleanup: not selected by current YAML architectures.
-
-
-# def efficientnet_b0_2(pretrained: bool, num_classes: int):
-#     Commented out during cleanup: not selected by current YAML architectures.
-
-
-# def efficientnet_b0_3(pretrained: bool, num_classes: int):
-#     Commented out during cleanup: not selected by current YAML architectures.
-
-
-# def efficientnet_b0_4(pretrained: bool, num_classes: int):
-#     Commented out during cleanup: not selected by current YAML architectures.
-
-
 def efficientnet_b0_5(pretrained: bool, num_classes: int):
     """
                 First layer 1x is initialized from pretrained 3x layer by taking average over 3 channels.

@@ -168,8 +168,7 @@ class Trainer:
         elif criterion_params["type"] == "CELoss_with_costs":
             class_weights = self.params["class_weights"]
             inv_costs = criterion_params.get("inv_costs", None)
-            # costs = criterion_params.get("costs", None)
-            # confidence = criterion_params.get("confidence", None)
+
             if isinstance(class_weights, dict):
                 class_weights_tensor = torch.tensor([class_weights[k] for k in range(self.num_classes)])
             else:
@@ -189,8 +188,6 @@ class Trainer:
             self.criterion = nn.CrossEntropyLoss(weight=class_weights_tensor)
             self.criterion = self.criterion.to(self.device)
 
-        # elif "focal" in criterion_params["type"].lower():
-        #     Commented out during cleanup: focal criterion variants are not used in current train/evaluate flow.
 
     def get_model_output(self, model_input):
         # this function gets model output and format it
@@ -213,16 +210,9 @@ class Trainer:
         self.model.train()
         self.epoch = epoch
 
-        # # debugging
-        # image_processor = SaveImage(path_to_save="/mnt/ZPE_cluster_results/igor_tests/augmentations_check",
-        #                             file_prefix='noinv_noblur_02noise', ext='png', str_labels=None)
 
         av_loss = 0
         for idx, batch in enumerate(self.dataloader['train']):
-
-            # # # TODO remove debugging:
-            # if idx > 1:
-            #     break
 
             # Define Input
             model_input = batch["image"].to(self.device)
@@ -232,15 +222,6 @@ class Trainer:
                 target = target.long()
 
             target = target.to(self.device)
-
-            # # TODO remove this debugging
-            # if torch.isnan(target).any():
-            #     print("has nan")
-            #     raise
-
-
-            # # debugging
-            # image_processor(model_input, target)
 
             self.optimizer.zero_grad()
             # Get Output
@@ -295,59 +276,6 @@ class Trainer:
         # compute requested metrics
         eval_metrics(targets, predictions, prediction_scores)
 
-        # scores = metrics.precision_recall_fscore_support(targets,
-        #                                                  predictions,
-        #                                                  average=None)
-        #
-        # # convert scores from tuple to list
-        # scores = [list(row) for row in scores]
-        #
-        # precision_scores = scores[0]
-        # recall_scores = scores[1]
-        #
-        # ###
-        # # Compute F_beta_Score
-        # ###
-        # print(f"Compute F_beta_score {time.ctime()}", flush=True)
-        # f_beta_scores = []
-        # for idx, class_label in self.class_label_dict.items():
-        #     delimiter = (self.logger.f1_score_weights[class_label]**2
-        #                  * precision_scores[idx]) + recall_scores[idx]
-        #     if delimiter != 0:
-        #         f_beta_score = (
-        #                 (1 + self.logger.f1_score_weights[class_label]**2)
-        #                 * precision_scores[idx]
-        #                 * recall_scores[idx]
-        #                 / delimiter
-        #         )
-        #     else:
-        #         f_beta_score = 0
-        #     f_beta_scores.append(f_beta_score)
-        # scores.append(f_beta_scores)
-        #
-        # ###
-        # # Compute bio_avg_f_beta_score
-        # ###
-        # print(f"Compute bio avg f_beta_score {time.ctime()}", flush=True)
-        # bio_f_beta_scores = []
-        # for idx, class_label in self.class_label_dict.items():
-        #     bio_f_beta_score = (
-        #             f_beta_scores[idx]
-        #             * self.logger.bio_relevance_weights[class_label]
-        #     )
-        #     bio_f_beta_scores.append(bio_f_beta_score)
-        # scores.append(bio_f_beta_scores)
-        # # print(f"Log with targets {time.ctime()}", flush=True)
-        # # self.logger.log_with_target(predictions=predictions,
-        # #                             prediction_scores=prediction_scores,
-        # #                             targets=targets,
-        # #                             loss_values=loss_values,
-        # #                             scores=scores,
-        # #                             stage=stage,
-        # #                             epoch=self.epoch)
-        #
-        # #scores.append(recall_scores) # used for computation of balanced accuracy
-
         # logging loss values and requested metrics
         print(f"Log scalar {time.ctime()}", flush=True)
         self.logger.log_scalar(loss_values=loss_values,
@@ -356,26 +284,12 @@ class Trainer:
                                epoch=self.epoch,
                                individual_classes=self.params.get("learning_curve_show", []))
 
-        # ###
-        # # Compute balanced accuracy - remove when you see that averaging recall scores is the same
-        # ###
-        # print(f"Compute balanced accuracy {time.ctime()}", flush=True)
-        # balanced_acc = metrics.balanced_accuracy_score(targets, predictions)
-        # mlflow.log_metric(key=f"{stage.upper()} - Balanced Accuracy", value=balanced_acc, step=self.epoch)
 
         # logging confusion matrix, performance table with requested metrics (report), false detections (images)
         if last_epoch:
             print(f"Log artifacts {time.ctime()}", flush=True)
             self.logger.log_artifacts(metrics=eval_metrics, epoch=self.epoch)
 
-            # # TODO bring it back (does not work for MTL now)
-            # print(f"Log images {time.ctime()}", flush=True)
-            # dataset = self.dataloader[stage].dataset
-            # self.logger.log_images(torch_dataset=dataset,
-            #                        predictions=predictions,
-            #                        prediction_scores=prediction_scores,
-            #                        targets=targets
-            #                        )
 
         # return scores, targets, predictions, prediction_scores, loss_values
         return
@@ -389,12 +303,7 @@ class Trainer:
                                params=self.session_params,
                                epoch=self.epoch)
 
-    # def print_metrics(self, scores: List) -> None:
-    #     """Pretty-Prints out Precision, Recall and F1-Score for all classes"""
-    #     print_metrics(scores, self.class_label_dict)
 
-    # def close(self):
-    #     self.logger.close()
 
     def find_pos_weights(self, n_MTLclasses: int) -> dict:
         """
@@ -424,8 +333,6 @@ class Trainer:
 
         for batch_obj in self.dataloader["train"]:
 
-            # TODO check how it works for batch size == 1
-
             batch_target = batch_obj['target']
             for target in batch_target:
 
@@ -441,9 +348,8 @@ class Trainer:
                     target = [target.item(), ]
 
                 # in case of MTL, targets are vectors instead of numbers
-                #if len(target) > 1:
                 assert len(target) > 1, "MTL case only"
-                    # MTL
+
 
                 targets = np.flatnonzero(target[:n_MTLclasses] == 1)
                 targets_neg = np.flatnonzero(target[:n_MTLclasses] == 0)

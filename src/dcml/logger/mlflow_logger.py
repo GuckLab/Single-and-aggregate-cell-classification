@@ -17,8 +17,7 @@ from ..evaluation.artifacts import (
     artifact_classification_report,
     artifact_sample_images_with_targets,
 )
-# from ..evaluation.helpers import retrieve_bio_relevance_weights, retrieve_f1_score_weights
-# from ..evaluation.scalars import compute_certainty_scores
+
 from ..utils.models import combine_to_jit  # save_jit_model
 from ..training.metrics import EvaluationMetrics
 
@@ -40,7 +39,6 @@ class MLflowLogger(BaseLogger):
             self._log_dir = pathlib.Path(log_dir)
 
         self.class_label_dict = class_label_dict
-        # self.ml_score_features = ml_score_features
 
         # Check if all necessary environment variables are set:
         for env_var in ENV_VARS:
@@ -59,11 +57,7 @@ class MLflowLogger(BaseLogger):
                              "'params['create_trainer']['logger']['experiment_name']'.")  # noqa: E501
 
         mlflow.set_experiment(experiment_name)
-        #curr_exp = mlflow.set_experiment(experiment_name)
 
-        # if experiment description was given in config file and current experiment does not have it (new experiment)
-        # if experiment_description is not None and not curr_exp.tags:
-        #     mlflow.set_experiment_tag("mlflow.note.content", experiment_description)
 
         # Set run-name
         # Check that the defined run-name is not already used
@@ -91,68 +85,8 @@ class MLflowLogger(BaseLogger):
             warnings.warn("No unique run-name defined. "
                           f"Assigning random run_name: {run_name}")
 
-        # self.bio_relevance_weights = retrieve_bio_relevance_weights(
-        #     [*class_label_dict.values()], ml_score_features, all_bio_relevance_weights=bio_relevance_weights)
-        # self.bio_relevance_weights = retrieve_bio_relevance_weights(class_label_dict, ml_score_features,
-        #                                                             all_bio_relevance_weights=bio_relevance_weights)
 
-        # self.f1_score_weights = retrieve_f1_score_weights(
-        #     [*class_label_dict.values()], ml_score_features, all_f1_score_weights=f1_score_weights)
-        # self.f1_score_weights = retrieve_f1_score_weights(class_label_dict, ml_score_features,
-        #                                                   all_f1_score_weights=f1_score_weights)
 
-    # def log_scalar_without_target(self,
-    #                               predictions: Iterable,
-    #                               prediction_scores: Iterable,
-    #                               stage: str,
-    #                               epoch: int,):
-    #     """
-    #     Log scalar values without target data.
-    #
-    #     Parameters
-    #     ----------
-    #     predictions : Iterable
-    #         The predictions made by the model.
-    #     prediction_scores : Iterable
-    #         Scores associated with each prediction.
-    #     stage: str
-    #         Either `train` or `val`
-    #     epoch: int
-    #         Current epoch of the training process
-    #     """
-    #     ###
-    #     # Logging Certainty Statistics (Median)
-    #     ###
-    #
-    #     certainty_scores: Iterable = compute_certainty_scores(
-    #                                                         prediction_scores,
-    #                                                         np.median)
-    #     for idx, class_label in self.class_label_dict.items():
-    #         mlflow.log_metric(key=f"{stage.upper()}-{class_label} "
-    #                               "Median Score of positive predictions",
-    #                           value=certainty_scores[idx],
-    #                           step=epoch)
-    #
-    # # def log_artifacts_without_target(self,
-    # #                                  predictions: Iterable,
-    # #                                  prediction_scores: Iterable,
-    # #                                  stage: str,
-    # #                                  epoch: int):
-    # #     """
-    # #     Log artifacts without target data.
-    # #
-    # #     Parameters
-    # #     ----------
-    # #     predictions : Iterable
-    # #         The predictions made by the model.
-    # #     prediction_scores : Iterable
-    # #         Scores associated with each prediction.
-    # #     stage: str
-    # #         Either `train` or `val`
-    # #     epoch: int
-    # #         Current epoch of the training process
-    # #     """
-    # #     pass
 
     def log_scalar(self, loss_values: Iterable,
                    metrics: EvaluationMetrics,
@@ -316,19 +250,6 @@ class MLflowLogger(BaseLogger):
         mlflow_model_path = str(self.active_run.info.artifact_uri)[7:] + "/" + model_name + "/data/model.pth"
         print("Epoch[", epoch, "]: Model saved in mlflow under ", mlflow_model_path)
 
-        # # Strip off a prefix like file://, s3://, or similar.
-        # model_path = (
-        #         str(self.active_run.info.artifact_uri)[7:]
-        #         + "/" + model_name + "/model"
-        # )
-        #
-        # print("Epoch[", epoch, "]: Saving model under ", model_path)
-        # # save jit model to enable prediction with local model_path
-        # save_jit_model(model=model,
-        #                transform=transform,
-        #                path=model_path,
-        #                params_dict=params,
-        #                epoch=epoch)
 
     def log_params(self, params: dict, filename: str = "configuration.yaml", params_section: bool = False) -> None:
         """Logs the parameter dict as artifact
@@ -410,7 +331,4 @@ class MLflowLogger(BaseLogger):
     def __del__(self):
         self.close()
 
-        # if self._log_dir_tmp is not None:
-        #     self._log_dir_tmp.cleanup()
-        #
-        # mlflow.end_run()
+

@@ -1,23 +1,3 @@
-import matplotlib.pyplot as plt
-import numpy as np
-
-
-# def get_metrics_table(scores, class_label_dict):
-#     fig, ax = plt.subplots(figsize=(12, 4))
-#     fig.patch.set_visible(False)
-#     ax.axis = ('off')
-#     ax.axis = ('tight')
-#     row_labels = ["Precision", "Recall", "F1-Score"]
-#     num_classes = len(class_label_dict)
-#     col_labels = [class_label_dict[k]
-#                   for k in range(num_classes)]
-#     table = plt.table(np.round(scores, 3),
-#                       rowLabels=row_labels, colLabels=col_labels,
-#                       loc='center')
-#     table.set_fontsize(14)
-#     fig.tight_layout()
-#     return fig
-
 
 def flatten_dict(d, parent_key='', sep='_'):
     """

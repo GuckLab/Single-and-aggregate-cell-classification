@@ -12,10 +12,6 @@ from ..data import RTDCDataset
 from ..data.utils import create_cell_class_array, map_targets, resolve_filepaths, reverse_dict
 from ..io import load_ml_score_to_int
 
-
-# from .models import list_original_module_names
-
-
 def feature_intersection(features_by_dataset: List[List[str]]) -> List[str]:
     """Returns the intersection of a list of feature-lists"""
     if not features_by_dataset:
@@ -108,24 +104,6 @@ def create_data_sampler(sampler_type, weights, num_samples):
     return dataset_train_sampler
 
 
-# def create_data_sampler(sampler_params, weights, len_dataset):
-#     """
-#         Creates and returns a data sampler based on
-#         the specified sampler parameters.
-#     """
-#     dataset_train_sampler = None
-#     sampler_type = sampler_params.get("type", '')
-#     if sampler_type.lower() == 'weightedrandomsampler':
-#         num_samples = sampler_params.get("num_samples", len_dataset)
-#         print(f"Prepare weightedRandomSampler: "
-#               f"{num_samples} samples.", flush=True)
-#         dataset_train_sampler = WeightedRandomSampler(
-#             weights=weights,
-#             num_samples=num_samples,
-#             replacement=True)
-#     return dataset_train_sampler
-
-
 def create_single_dataset(hdf5_path: str,
                           required_data: dict,
                           target_grouping: dict = None,
@@ -141,13 +119,6 @@ def create_single_dataset(hdf5_path: str,
                           unknowns_target_grouping: dict = None,
                           ) -> RTDCDataset:
     """Create a dataset from a single rtdc file; used for prediction """
-
-    # if target_grouping is None:
-    #     target_grouping = {}
-
-    # target_mapping = {}
-    # for k, v in target_grouping.items():
-    #     target_mapping.update(dict.fromkeys(v, k))
 
     hdf5_ds = HDF5Data(hdf5_path)
     indexes_dataset = np.arange(0, len(hdf5_ds))
@@ -230,7 +201,6 @@ def create_datasets(hdf5_paths: List[str],
     print(f"Concatenate hdf5 data {time.ctime()}", flush=True)
     # Create Virtual HDF5-dataset of all datasets
     hdf5_ds = concatenated_hdf5_data(hdf5_paths, features=features)
-    #hdf5_ds = HDF5Data('/tmp/dcnum_vc_g2h2q2so.hdf5')
     hdf5_ds.h5.tempFile = True  # dataset temporary file on the disk created by concatenated_hdf5_data()
     # to be removed after code ends, with destructor of the RTDCDataset class
 
@@ -332,59 +302,4 @@ def create_datasets(hdf5_paths: List[str],
 
     return dataset_train, dataset_val
 
-# def create_prediction_datasets(hdf5_paths,
-#                                dataset_params: dict,
-#                                transform,
-#                                crop_size,
-#                                correct_background: bool = False
-#                                ) -> RTDCDataset:
-#     """
-#     Create a prediction dataset with the specified transformations.
-#
-#     This function prepares a Torch DataLoader for prediction by configuring
-#     the dataset parameters and transformations. It reads the augmentation
-#     parameters, sets up normalization values and creates an RTDCDataset.
-#
-#     Args:
-#         hdf5_paths (list or str): The path(s) to file(s) contains the dataset.
-#         dataset_params (dict): A dictionary containing dataset parameters,
-#                                including augmentation settings.
-#         transform (callable): The transformation function or pipeline to be
-#                               applied to the dataset images.
-#         correct_background (bool, optional): A flag indicating if we correct
-#                                             the background of the images.
-#                                              Defaults to False.
-#
-#     Returns:
-#         RTDCDataset: The prepared dataset ready for prediction.
-#     """
-#     # Prepare Torch-DataLoader
-#     required_data = {"image": "image"}
-#     augm_params = {}
-#     mean = 0
-#     std = 1
-#     prediction_aug_params_names = list_original_module_names(transform)
-#
-#     for params_name in prediction_aug_params_names:
-#
-#         if params_name == 'ApplyNormalize':
-#             mean = dataset_params['mean']
-#             std = dataset_params['std']
-#
-#         elif params_name != 'ApplyToTensor':
-#             augm_params[params_name] = dataset_params["augmentation"][params_name]
-#
-#
-#     dataset = RTDCDataset(hdf5_data=hdf5_paths,
-#                           required_data=required_data,
-#                           augm_params=augm_params,
-#                           crop_size=crop_size,
-#                           mean=mean,
-#                           std=std,
-#                           correct_background=correct_background,
-#                           train=False)
-#
-#     if len(dataset) == 0:
-#         print("Warning: the created dataset is empty")
-#
-#     return dataset
+

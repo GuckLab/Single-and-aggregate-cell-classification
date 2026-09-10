@@ -36,19 +36,6 @@ def correct_bg_on_image(
 
     return image_corr
 
-
-# def _subtract_rolling_median(images_slice, kernel_size=100):
-#     Commented out during cleanup: unused in current train/evaluate flow.
-
-
-# def _subtract_rolling_median_on_mp_array(row_idx, images_slice, kernel_size=100):
-#     Commented out during cleanup: unused in current train/evaluate flow.
-
-
-# def init_mp_global(arr):
-#     Commented out during cleanup: unused in current train/evaluate flow.
-
-
 # def _correct_background_on_subset(images, kernel_size=100, processes=None, use_mp_array=True):
 #     Commented out during cleanup: unused in current train/evaluate flow.
 

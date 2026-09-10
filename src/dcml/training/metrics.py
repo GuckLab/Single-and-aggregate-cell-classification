@@ -7,32 +7,6 @@ from tabulate import tabulate
 from torch import Tensor
 import torch
 
-# def refine_mc_targets(targets: Tensor, wbc_ind: int) -> Tensor:
-#     """
-#
-#     # Refines mc targets within MTL, such that if all subtype targets are zeros, nans are assigned instead
-#
-#     Parameters
-#     ----------
-#     targets: 2D tensor with true labels (floats), with rows as samples and columns as classes
-#     wbc_ind: class index for WBC
-#
-#     Returns
-#     -------
-#     targets: 2D tensor, which either have a single 1. or all un-definite values (nan) for WBC types of each sample
-#     """
-#
-#     # TODO here we rely that WBC subtypes are right after WBC class and nothing else
-#     mask = torch.sum(targets[:, (wbc_ind+1):] == 1, dim=1) != 1
-#     targets[mask, (wbc_ind+1):] = torch.nan
-#
-#     assert(torch.sum(torch.sum(targets[:, (wbc_ind + 1):] == 1, dim=1) > 1) == 0)
-#
-#
-#     return targets
-
-
-
 
 def balanced_accuracy(targets: Tensor, predictions: Tensor) -> np.ndarray:
     """
@@ -56,7 +30,6 @@ def balanced_accuracy(targets: Tensor, predictions: Tensor) -> np.ndarray:
 
     n_classes = targets.shape[1]
 
-    #cls_ba = np.full(n_classes, np.nan, dtype=float)
     cls_ba = np.full(n_classes, 0, dtype=float)
 
     for cls in range(n_classes):
@@ -307,21 +280,15 @@ class EvaluationMetrics:
         self._report = None
         self._confusion_matrix = None
         self._confusion_matrix_labels = None
-        #self.confusion_matrix_int_labels = None
 
         self.targets = None
         self.predictions = None
-
-        # # MTL case
-        # self.wbc_ind = self.target_names.index('wbc')
-        # self.aggr_index = self.target_names.index('Aggregation')
 
         self.wbc_ind = None
         self.aggr_index = None
         self.cls_type = "MC"
         if ('wbc' in self.target_names and not cls_type) or (cls_type=="MTL"):  # MTL case
 
-            #assert 'Aggregation' in self.target_names, "Aggregation must be in target labels along with wbc"
             self.cls_type = "MTL"
 
             try:
@@ -391,42 +358,23 @@ class EvaluationMetrics:
             assert torch.all(
                               torch.all(torch.isnan(targets[wbc_indexes, (self.wbc_ind + 1):]), dim=1) |
                               torch.sum(targets[wbc_indexes, (self.wbc_ind + 1):] == 1, dim=1)
-            ), "aaa"
+            ), "warning: for each object with WBC, MC labels must be either all nan or have a single one among all other zeros"
 
             # for each object without WBC, all MC labels must be zeros or all must ne nan
             assert torch.all(
                               torch.all(torch.isnan(targets[not_wbc_indexes, (self.wbc_ind + 1):]), dim=1) |
                               torch.all(targets[not_wbc_indexes, (self.wbc_ind + 1):] == 0, dim=1)
-            ), "ahhhhh"
+            ), "warning: for each object without WBC, all MC labels must be zeros or all must ne nan"
 
-            # for each object without uknown WBC, all MC labels must be nans
-            assert torch.all(torch.isnan(targets[unknown_wbc_indexes, (self.wbc_ind + 1):])), "hhhhhhhh"
+            # for each object without unknown WBC, all MC labels must be nans
+            assert torch.all(torch.isnan(targets[unknown_wbc_indexes, (self.wbc_ind + 1):])), "warning: unknown WBC type should have all MC labels as nan"
 
-            #targets = refine_mc_targets(targets, self.wbc_ind)  # must be insured by proper definition of labels/ignore labels in the configuration file, see assert above
-
-            #keep_entries = (targets[:, self.aggr_index] == 0)  |  (targets[:, self.wbc_ind] == 0)
             assert targets.shape[1] == len(self.target_names)
 
-        # else: # MC case
-        #     keep_entries = np.full(targets.shape[0], True) # keep all entries
-
-        # keep_entries = np.full(targets.shape[0], True)  # keep all e
-
-        # self.targets = targets[keep_entries]
-        # self.predictions = predictions[keep_entries]
 
         self.targets = targets
         self.predictions = predictions
         self.prediction_scores = prediction_scores
-
-        # if prediction_scores is not None:
-        #     self.prediction_scores = prediction_scores[keep_entries]
-        # else:
-        #     assert "roc_auc_score" not in self.requested_metric_names, ("roc_auc_scores are not provided, "
-        #                                                                 "but the corresponding metric is requested")
-        #     assert "average_precision_score" not in self.requested_metric_names, ("average_precision_scores"
-        #                                                                           " are not provided, but but the "
-        #                                                                           "corresponding metric is requested")
 
         # outputs the tuple (precision, recall, fbeta_score, support) of lists, each of which contains
         # the corresponding metric for unique labels (taken from targets and predictions)
@@ -663,11 +611,6 @@ class EvaluationMetrics:
 
         return self._report
 
-    # @property
-    # def confusion_matrix(self):
-    #
-    #     print("confusion matrix is not implemented")
-    #     return None
 
     @property
     def confusion_matrix_labels(self):
@@ -686,17 +629,6 @@ class EvaluationMetrics:
 
         if self._confusion_matrix is None:
             if self.cls_type == "MTL": # MTL case
-
-                # mask_single_cell = (self.targets[:, self.aggr_index] == 0) & (self.predictions[:, self.aggr_index] == 0)
-                # targets = self._to_single_cell_data(self.targets, mask_single_cell, self.aggr_index, self.wbc_ind,
-                #                                     "targets")
-                # predictions = self._to_single_cell_data(self.predictions, mask_single_cell, self.aggr_index,
-                #                                         self.wbc_ind, "predictions")
-                #
-                # self._confusion_matrix_labels, confusion_matrix_int_labels = self._single_cell_labels_conf_mat()
-
-                #-----
-
 
                 self._confusion_matrix_labels = self.target_names
 
@@ -746,64 +678,6 @@ class EvaluationMetrics:
         return confusion_matrix_labels, confusion_matrix_int_labels
 
 
-    # # not used anymore
-    # def _to_single_cell_data(self, multi_label_data: Tensor, mask_single_cell: Tensor, aggr_index: int, wbc_ind:int, type: str):
-    #
-    #     # this function is to be used for computation of confusion matrix for the multi-label/multi-task case
-    #
-    #     # take out from the data all rows with aggregation=1
-    #     multi_label_data = multi_label_data[mask_single_cell]
-    #
-    #     # Remove wbc and aggregation columns
-    #     mask_single_cell_class = np.arange(len(self.target_names))
-    #     mask_single_cell_class = (mask_single_cell_class != aggr_index) & (mask_single_cell_class != wbc_ind)
-    #     multi_label_data = multi_label_data[:, mask_single_cell_class]
-    #
-    #     # Check that maximum only one entry is 1.
-    #     if type == "predictions":
-    #         assert torch.all(torch.sum(multi_label_data, dim=1) <= 1)
-    #     elif type == "targets":
-    #         assert torch.all(torch.sum(multi_label_data, dim=1) == 1)
-    #     else:
-    #         raise
-    #
-    #     # Add additional last column with zeros (unknown cell type)
-    #     zeros_tensor = torch.zeros((multi_label_data.shape[0], 1))
-    #     multi_label_data = torch.cat((multi_label_data, zeros_tensor), dim=1)
-    #
-    #     # For prediction if nothing detected put 1 there (unknown cell type)
-    #     if type == "predictions":
-    #         zeros_mask = torch.sum(multi_label_data, dim=1) == 0
-    #         multi_label_data[zeros_mask, multi_label_data.shape[1] - 1] = 1
-    #
-    #     # if update_labels:
-    #     #
-    #     #     confusion_matrix_labels, confusion_matrix_int_labels = self._single_cell_labels_conf_mat()
-    #     #
-    #     #     # # add unknown cell type label
-    #     #     # confusion_matrix_labels = self.target_names.copy()
-    #     #     # confusion_matrix_labels.append("Unknown type")
-    #     #     #
-    #     #     # # remove wbc, aggr types
-    #     #     # confusion_matrix_labels = self._single_cell_labels_conf_mat(confusion_matrix_labels)
-    #     #     #
-    #     #     # # add unknown cell type integer label
-    #     #     # confusion_matrix_int_labels = list(np.arange(multi_label_data.shape[1]))
-    #     #     #
-    #     #     # # confusion_matrix_int_labels = self.target_int_labels.copy()
-    #     #     # # confusion_matrix_int_labels.append(max(confusion_matrix_int_labels) + 1)
-    #     #     # # # remove wbc, aggr types
-    #     #     # # confusion_matrix_int_labels = self._single_cell_labels_conf_mat(confusion_matrix_int_labels)
-    #     # else:
-    #     #     confusion_matrix_labels = None
-    #     #     confusion_matrix_int_labels = None
-    #
-    #     # convert matrix labels to indexes 1D array
-    #     # ind_labels = torch.argmax(multi_label_data, dim=1)
-    #
-    #     return multi_label_data
-
-
     def _compute_generalized_confusion_matrix(self) -> Tensor:
         """
         Computes kind of confusion matrix with rows as observations and columns as classes. In contrast to standard
@@ -829,15 +703,7 @@ class EvaluationMetrics:
         supports = torch.sum(self.targets == 1, dim=0, keepdim=True)
         cfg = cfg / supports.T
 
-        # normalization according to the detections columns instead of target rows
-        # supports = torch.sum(self.predictions == 1, dim=0, keepdim=True)
-        #cfg = cfg / supports
-
-        #print(supports)
         return cfg
-
-
-
 
 
     # TODO can be static
@@ -926,67 +792,3 @@ class EvaluationMetrics:
 
         return targets_ml, predictions_ml
 
-# class ModelMetric:
-#     """
-#     A class representing a metric for evaluating model performance.
-#
-#     Attributes:
-#         name (str): The name of the metric.
-#         id (int): The identifier of the metric.
-#         value (float): The current value of the metric.
-#         weights (dict): Optional weights for metric.
-#         min_value (float): The minimum possible value of the metric.
-#     """
-#
-#     def __init__(self, name, id, weights=None, min_value=0):
-#         """
-#         Initializes a ModelMetric object.
-#
-#         Args:
-#             name (str): The name of the metric.
-#             id (int): The identifier of the metric.
-#             weights (dict, optional): Optional weights for metric.
-#             min_value (float, optional): The minimum possible value of metric.
-#             Defaults to 0.
-#         """
-#         self.name = name
-#         self.id = id
-#         self.value = min_value
-#         self.weights = weights
-#
-#     def get_new_value(self, scores) -> float:
-#         """
-#         Computes the new value of the metric based on the provided scores.
-#
-#         Args:
-#             scores (dict): A dictionary containing prediction scores.
-#             They include scores related to metric.
-#
-#         Returns:
-#             float: The new computed value of the metric.
-#         """
-#         if self.weights:
-#             total_weight = sum(self.weights.values())
-#             return sum(scores[self.id]) / total_weight
-#         else:
-#             return sum(scores[self.id]) / len(scores[self.id])
-#
-#     def has_improved(self, new_value) -> bool:
-#         """
-#         Checks if the new predictions are better than before.
-#
-#         If passed predictions are better than previous ones, based on the
-#         computed metric value, updates the `value` attribute.
-#         In both cases, it returns whether the predictions were better or not.
-#
-#         Args:
-#             new_value (float): The new value of the metric.
-#
-#         Returns:
-#             bool: True if the new predictions are better, False otherwise.
-#         """
-#         if new_value > self.value:
-#             self.value = new_value
-#             return True
-#         else:
-#             return False

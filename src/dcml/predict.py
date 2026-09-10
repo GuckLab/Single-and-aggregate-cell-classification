@@ -45,7 +45,6 @@ def mtl_full_prediction(mtl_scores, wbc_ind, aggr_ind, mc_scores, thr, free_depe
     """
 
     # make predictions for MTL with thresholding
-    #preds_mtl = MTL_mtl_prediction2(mtl_scores, thr, aggr_ind)
     preds_mtl = MTL_mtl_prediction3(mtl_scores, thr, aggr_ind, free_dependent_aggr=free_dependent_aggr)
 
     # make predictions for multiclass - WBCs (one-hot vectors)

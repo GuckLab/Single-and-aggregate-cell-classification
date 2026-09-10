@@ -13,50 +13,6 @@ class BaseLogger(abc.ABC):
     with or without target data.
     """
 
-    # @abc.abstractmethod
-    # def log_scalar_without_target(self,
-    #                               predictions: Iterable,
-    #                               prediction_scores: Iterable,
-    #                               stage: str,
-    #                               epoch: int,):
-    #     """
-    #     Log scalar values without target data.
-    #
-    #     Parameters
-    #     ----------
-    #     predictions : Iterable
-    #         The predictions made by the model.
-    #     prediction_scores : Iterable
-    #         Scores associated with each prediction.
-    #     stage: str
-    #         Either `train` or `val`
-    #     epoch: int
-    #         Current epoch of the training process
-    #     """
-    #     pass
-
-    # @abc.abstractmethod
-    # def log_artifacts_without_target(self,
-    #                                  predictions: Iterable,
-    #                                  prediction_scores: Iterable,
-    #                                  stage: str,
-    #                                  epoch: int):
-    #     """
-    #     Log artifacts without target data.
-    #
-    #     Parameters
-    #     ----------
-    #     predictions : Iterable
-    #         The predictions made by the model.
-    #     prediction_scores : Iterable
-    #         Scores associated with each prediction.
-    #     stage: str
-    #         Either `train` or `val`
-    #     epoch: int
-    #         Current epoch of the training process
-    #     """
-    #     pass
-
     @abc.abstractmethod
     def log_scalar(self, loss_values: Iterable,
                    metrics: EvaluationMetrics,
@@ -119,77 +75,6 @@ class BaseLogger(abc.ABC):
         """
         pass
 
-    # def log_with_target(self,
-    #                     predictions: Iterable,
-    #                     prediction_scores: Iterable,
-    #                     targets: Iterable,
-    #                     loss_values: Iterable,
-    #                     scores: Iterable,
-    #                     stage: str,
-    #                     epoch: int):
-    #     """
-    #     Combines logging of scalar and artifacts that require target data.
-    #
-    #     Parameters
-    #     ----------
-    #     predictions : Iterable
-    #         The predictions made by the model.
-    #     prediction_scores : Iterable
-    #         Scores associated with each prediction.
-    #     targets : Iterable
-    #         Ground truth values.
-    #     loss_values : Iterable
-    #         Loss values for each prediction.
-    #     stage: str
-    #         Either `train` or `val`
-    #     epoch: int
-    #         Current epoch of the training process
-    #     """
-    #     print(f"Log scalar {time.ctime()}", flush=True)
-    #     self.log_scalar(predictions=predictions,
-    #                     prediction_scores=prediction_scores,
-    #                     targets=targets,
-    #                     loss_values=loss_values,
-    #                     scores=scores,
-    #                     stage=stage,
-    #                     epoch=epoch)
-    #     # if stage != 'train':
-    #     #     print(f"Log artifacts {time.ctime()}", flush=True)
-    #     #     self.log_artifacts(predictions=predictions,
-    #     #                        prediction_scores=prediction_scores,
-    #     #                        targets=targets,
-    #     #                        loss_values=loss_values,
-    #     #                        scores=scores,
-    #     #                        stage=stage,
-    #     #                        epoch=epoch)
-
-    # def log_without_target(self,
-    #                        predictions: Iterable,
-    #                        prediction_scores: Iterable,
-    #                        stage: str,
-    #                        epoch: int):
-    #     """
-    #     Combines logging of scalar and artifacts that don't require target data
-    #
-    #     Parameters
-    #     ----------
-    #     predictions : Iterable
-    #         The predictions made by the model.
-    #     prediction_scores : Iterable
-    #         Scores associated with each prediction.
-    #     stage: str
-    #         Either `train` or `val`
-    #     epoch: int
-    #         Current epoch of the training process
-    #     """
-    #     self.log_scalar_without_target(predictions=predictions,
-    #                                    prediction_scores=prediction_scores,
-    #                                    stage=stage,
-    #                                    epoch=epoch)
-    #     self.log_artifacts_without_target(predictions=predictions,
-    #                                       prediction_scores=prediction_scores,
-    #                                       stage=stage,
-    #                                       epoch=epoch)
 
     @abc.abstractmethod
     def log_params(self, params: dict, filename: str) -> None:
@@ -235,7 +120,3 @@ class BaseLogger(abc.ABC):
         """Make sure the everthing is closed properly"""
         pass
 
-    # @abc.abstractmethod
-    # def __del__(self):
-    #     """Make sure the everthing is closed properly"""
-    #     pass

@@ -194,12 +194,6 @@ def predict_cell_type_with_basin(path_in: Union[str, Path],
 
     logger.info(f"Cell Prediction -- End Time: {time.ctime()}")
 
-    # prediction_probs_old = get_predictions_old(ds_path=path_in,
-    #                                    model=model,
-    #                                    batch_size=batch_size,
-    #                                    num_workers=num_workers,
-    #                                    device=device)
-
     # Write prediction to dataset
     logger.info("Writing Predictions to RTDC-Dataset...")
     with dclab.RTDCWriter(path_out, mode="reset") as writer, \
@@ -220,8 +214,6 @@ def predict_cell_type_with_basin(path_in: Union[str, Path],
                            basin_format="hdf5",
                            basin_locs=[path_in.resolve()],
                            basin_feats=basin_feats)
-
-    # logger.info(f"Cell Prediction of {path_in} -- End Time: {time.ctime()}")
 
 
 def predict_cell_type(path_in: Union[str, Path],
@@ -298,21 +290,6 @@ def predict_cell_type(path_in: Union[str, Path],
         subprocess.call(['h5repack'] + [str(path_out), path_out_tmp])
         shutil.move(path_out_tmp, str(path_out))
 
-    # Setup (order is important and has to correspond to the target order
-    # of the model)
-    # logger.info(f"Number of Workers: {num_workers}")
-    # logger.info(f"Batch size: {batch_size}")
-
-    # Model Instantiation
-    # model = OneModel(model_path=model_path, device=device, model_name=model_name, mlflow=mlflow)
-
-    # Now work on file in "path_out"-path:
-    # Load dataset as torch.dataset
-    # prediction_probs = _get_predictions(ds_path=path_in,
-    #                                     model=model,
-    #                                     batch_size=batch_size,
-    #                                     num_workers=num_workers,
-    #                                     device=device)
 
     logger.info(f"Cell Prediction in {path_in} -- Start Time: {time.ctime()}")
     prediction_probs = get_predictions(ds_path=path_in,
@@ -331,46 +308,6 @@ def predict_cell_type(path_in: Union[str, Path],
     with dclab.rtdc_dataset.RTDCWriter(path_out) as writer:
         for idx, fn in enumerate(model.feature_names):
             writer.store_feature(fn, prediction_probs[:, idx])
-
-# # TODO Do I need this function? It is currently only used in update_prediction_of_dir() which is not used anywhere else.
-# def update_prediction(path_in,
-#                       # model_path,
-#                       # model_name = "",
-#                       model: OneModel = None,
-#                       # mlflow: bool = False,
-#                       device: str = 'cuda',
-#                       num_workers: int = 16,
-#                       mean=None,
-#                       std=None,
-#                       brightness_factor=None):
-#     """Update predictions of file given by `path_in`
-#
-#     Wraps around `predict_cell_type`.
-#
-#     Parameter
-#     ---------
-#     path_in:
-#         Path of RTDC file for which cell prediction will be updated
-#     model_path:
-#         Path to model for general cell type prediction or run id string if mlflow=True
-#     model_name: name of the model in mlflow repository if mlflow=True
-#     device: {'cuda', 'cpu'}, optional
-#     num_workers: int, optional
-#         Count of threads used for Dataloader to load batches
-#     """
-#     predict_cell_type(path_in=path_in,
-#                       path_out=path_in,  # note path_out is set to path_in
-#                       # model_path=model_path,
-#                       # model_name=model_name,
-#                       model=model,
-#                       # mlflow=mlflow,
-#                       device=device,
-#                       num_workers=num_workers,
-#                       cleanup_predictions=True,
-#                       mean=mean,
-#                       std=std,
-#                       brightness_factor=brightness_factor)
-
 
 def apply_prediction_to_dir(path_in: Union[str, Path],
                             path_out: Union[str, Path],
@@ -408,12 +345,9 @@ def apply_prediction_to_dir(path_in: Union[str, Path],
         if with_basin:
             predict_cell_type_with_basin(path_in=src_tmp,
                                          path_out=dst_tmp,
-                                         # model_path=model_path,
-                                         # model_name=model_name,
                                          model=model,
                                          device=device,
                                          num_workers=num_workers,
-                                         # mlflow=mlflow,
                                          mean=mean,
                                          std=std,
                                          brightness_factor=brightness_factor
@@ -422,12 +356,9 @@ def apply_prediction_to_dir(path_in: Union[str, Path],
             # apply processing script
             predict_cell_type(path_in=src_tmp,
                               path_out=dst_tmp,
-                              # model_path=model_path,
-                              # model_name=model_name,
                               model=model,
                               device=device,
                               num_workers=num_workers,
-                              # mlflow=mlflow,
                               cleanup_predictions=cleanup_predictions,
                               mean=mean,
                               std=std,
@@ -439,8 +370,6 @@ def apply_prediction_to_dir(path_in: Union[str, Path],
             shutil.copyfile(src=dst_tmp, dst=dst)
             src_tmp.unlink()
             dst_tmp.unlink()
-        # else: # TODO do I need this?
-        #     shutil.copyfile(src=src, dst=dst)
 
     # TODO used in process_file as global - bad style
     model = OneModel(model_path=model_path, device=device, model_name=model_name)
@@ -449,8 +378,7 @@ def apply_prediction_to_dir(path_in: Union[str, Path],
     path_out = Path(path_out)
 
     rel_in_files = [os.path.relpath(el, path_in) for el in path_in.rglob("*.rtdc") if el.is_file()]
-    # rtdc_total = len([el for el in rel_in_files if ".rtdc" in el])
-    # rtdc_processed = 0
+
     n_files = len(rel_in_files)
     for ind, ff in enumerate(rel_in_files):
         src = path_in / Path(ff)
@@ -458,85 +386,11 @@ def apply_prediction_to_dir(path_in: Union[str, Path],
         dst.parent.mkdir(parents=True, exist_ok=True)
         print("Processing file: " + f"{ind}/{n_files}")
         try:
-        # if src.is_file():
-
-        # if src.suffix == '.rtdc':
-        #     with dclab.new_dataset(src) as ds:
-        #         print(f"Processing File {ff} of length {len(ds)}")
-        #         rtdc_processed += 1
-        #         print("Processing RTDC-File: " + f"{rtdc_processed}/{rtdc_total}")
-
             process_file(src, dst, with_basin)
         except KeyboardInterrupt:
             break
         except Exception as e:
             logger.info(f"\n\tERROR Processing File: {ff}\n{e}\n")
-
-# # TODO Do I need this function?
-# def update_prediction_of_dir(path_in: Union[str, Path],
-#                              model_path: Union[str, Path],
-#                              model_name: str = "",
-#                              # mlflow: bool = False,
-#                              device: str = 'cuda',
-#                              num_workers: int = 16,
-#                              compute_locally: bool = False,
-#                              mean=None,
-#                              std=None,
-#                              brightness_factor=None
-#                              ):
-#     def process_file(src):
-#         if compute_locally:
-#             # Setting up Path
-#             src_tmp = Path("tmp_orig.rtdc")
-#             # copy data from src to local
-#             shutil.copy(src, src_tmp)
-#         else:
-#             src_tmp = src
-#
-#         # apply processing script
-#         update_prediction(path_in=src_tmp,
-#                           # model_path=model_path,
-#                           # model_name=model_name,
-#                           model=model,
-#                           # mlflow=mlflow,
-#                           device=device,
-#                           num_workers=num_workers,
-#                           mean=mean,
-#                           std=std,
-#                           brightness_factor=brightness_factor,
-#                           )
-#
-#         # copy data from local to dst
-#         if compute_locally:
-#             shutil.copyfile(src=src_tmp, dst=src)
-#             src_tmp.unlink()
-#
-#     # TODO put it as an argument to process_file()
-#     model = OneModel(model_path=model_path, device=device, model_name=model_name)
-#
-#     path_in = Path(path_in)
-#
-#     rel_in_files = [os.path.relpath(el, path_in)
-#                     for el in path_in.rglob("**/*")]
-#     rtdc_files = [el for el in rel_in_files if ".rtdc" in el]
-#
-#     rtdc_total = len([el for el in rel_in_files if ".rtdc" in el])
-#     rtdc_processed = 0
-#
-#     for ff in rtdc_files:
-#         src = path_in / Path(ff)
-#         try:
-#             with dclab.new_dataset(src) as ds:
-#                 logger.info(f"Processing File {ff} of length {len(ds)}")
-#             rtdc_processed += 1
-#             print("Processing RTDC-File: "
-#                   + f"{rtdc_processed}/{rtdc_total}")
-#             process_file(src)
-#         except KeyboardInterrupt:
-#             break
-#         except Exception as e:
-#             logger.info(f"\n\tERROR Processing File: {ff}\n{e}\n")
-
 
 def remove_unlabeled_events(src: [str, Path],
                             dst: [str, Path],
@@ -644,126 +498,3 @@ def fill_all_annotation_features(src: [str, Path]) -> None:
                 hf["events"].create_dataset(score_name,
                                             data=emtpy_feat_array)
 
-
-# def prepare_annotated_dctag_dataset_for_training(src: [str, Path],
-#                                                  dst: [str, Path],
-#                                                  override: bool = False
-#                                                  ) -> None:
-#     """ Prepares annotated datasets frorm DCTag for training in DeepClassifier
-#
-#     This function wraps around `remove_unlabeled_events` and
-#     `fill_all_annotation_features`, executes them in that order and
-#     outputs the cleaned file with created `ml_score_`-features
-#     to the `dst`-path.
-#
-#     Parameter
-#     ---------
-#     src: [str, pathlib.Path]
-#         Path of the dataset which needs to be prepared for training
-#     dest: [str, pathlib.Path]
-#         Path where the prepared dataset will be saved
-#     """
-#     src = Path(src)
-#     dst = Path(dst)
-#
-#     remove_unlabeled_events(src, dst, override=override)
-#     fill_all_annotation_features(src=dst)
-
-
-# def transfer_feature_to_filtered_dataset(
-#         original_ds_path: [str, Path],
-#         filtered_ds_path: [str, Path],
-#         feature: str) -> None:
-#     """Transfers feature from original dataset to its filtered version
-#
-#     Based on `index_online` this function will write features from the original
-#     dataset to its filtered version if the feature does not exist yet.
-#     E.g. this can be used for transferring `image_bg` from a parent dataset
-#     to its child dataset
-#
-#     Parameters
-#     original_ds_path: [str, Path]
-#         Path to original unfiltered dataset
-#     filtered_ds_path: [str, Path]
-#         Path to filtered dataset
-#     feature: str
-#         Name of feature which should be transferred
-#     """
-#     with dclab.new_dataset(original_ds_path) as original_ds, \
-#             dclab.new_dataset(filtered_ds_path) as filtered_ds:
-#         idxs_online = filtered_ds["index_online"]
-#         real_index_od = np.argwhere(np.isin(original_ds["index_online"],
-#                                             idxs_online)).ravel()
-#         data = original_ds[feature][real_index_od]
-#         shape = data[0].shape
-#
-#     # Update the feature in the filtered_ds_path
-#     with dclab.RTDCWriter(filtered_ds_path, mode="replace") as writer:
-#         writer.store_feature(feat=feature,
-#                              data=data,
-#                              shape=shape)
-#         logger.info(f"'{feature}' successfully written "
-#                     f"to '{filtered_ds_path}'.")
-
-
-# # TODO remove it? not used
-# def predict_mlflow_cell_type_with_basin(path_in: Union[str, Path],
-#                                         path_out: Union[str, Path],
-#                                         model_path: str,
-#                                         model_name: str = "",
-#                                         device: str = 'cpu',
-#                                         # mlflow: bool = False,
-#                                         num_workers: int = 8,
-#                                         batch_size: int = 1,
-#                                         mean=None,
-#                                         std=None,
-#                                         brightness_factor=None
-#                                         ):
-#     """
-#     """
-#     path_in = Path(path_in)
-#     path_out = Path(path_out)
-#
-#     if path_out.exists():
-#         raise FileExistsError(f"File already exists at Path: '{path_out}'!")
-#
-#     # Copy File to "path_out"-path
-#     if not (path_in.resolve() == path_out.resolve()):
-#         shutil.copyfile(path_in, path_out)
-#
-#     logger.info(f"Cell Prediction of {path_in} -- Start Time: {time.ctime()}")
-#     logger.info(f"Number of Workers: {num_workers}")
-#     logger.info(f"Batch size: {batch_size}")
-#
-#     model = OneModel(model_path=model_path, device=device, model_name=model_name)
-#
-#     prediction_probs = get_predictions(ds_path=path_in,
-#                                        model=model,
-#                                        batch_size=batch_size,
-#                                        num_workers=num_workers,
-#                                        device=device,
-#                                        mean=mean,
-#                                        std=std,
-#                                        brightness_factor=brightness_factor)
-#
-#     # Write prediction to dataset
-#     logger.info("Writing Predictions to RTDC-Dataset...")
-#     with dclab.RTDCWriter(path_out, mode="reset") as writer, \
-#             dclab.new_dataset(path_in) as ds_in:
-#         # Write predictions to new dataset
-#         for idx, feat in enumerate(model.feature_names):
-#             writer.store_feature(feat, prediction_probs[:, idx])
-#
-#         # Write Metadata to new dataset
-#         meta = dict(ds_in.config)
-#         meta.pop("filtering")
-#         writer.store_metadata(meta)
-#
-#         basin_feats = [el for el in ds_in.features if "ml_score" not in el]
-#         writer.store_basin(basin_name="segmentation_and_features",
-#                            basin_type="file",
-#                            basin_format="hdf5",
-#                            basin_locs=[path_in.resolve()],
-#                            basin_feats=basin_feats)
-#
-#     logger.info(f"Cell Prediction of {path_in} -- End Time: {time.ctime()}")

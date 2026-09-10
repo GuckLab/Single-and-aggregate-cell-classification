@@ -1,4 +1,4 @@
-from src.dcml.logger import MLflowLogger  # TensorboardLogger
+from src.dcml.logger import MLflowLogger
 
 
 def retrieve_logger(logger_params, class_label_dict, log_dir=None):
@@ -14,8 +14,5 @@ def retrieve_logger(logger_params, class_label_dict, log_dir=None):
                               )
     else:
         raise Exception("tensorflow logger is deprecated")
-        # logger = TensorboardLogger(log_dir=log_dir,
-        #                            class_label_dict=class_label_dict,
-        #                            ml_score_features=ml_score_features
-        #                            )
+
     return logger

@@ -87,31 +87,6 @@ def print_batch(epoch: int, batch_idx: int, loss_value: float) -> None:
     print(f"Epoch: {epoch} - Batch: {batch_idx} - Loss: {loss_value}")
 
 
-# def print_metrics(scores, class_label_dict):
-#     """Pretty-Prints out Precision, Recall and F1-Score for all classes"""
-#     class_names = [v for k, v in sorted(class_label_dict.items())]
-#     metric_types = ["Precision", "Recall", "F1"]
-#     print(tabulate(
-#         [[metr, *(scores[idx])] for idx, metr in enumerate(metric_types)],
-#         headers=["Metrics"]+class_names), flush=True)
-
-
-# def create_matrix_penalization(penalization_filepath) -> dict:
-#     Commented out during cleanup: focal-loss support helper is unused.
-
-
-# def retrieve_penalization_weights(predictions, targets, penalties):
-#     Commented out during cleanup: focal-loss support helper is unused.
-
-
-# def create_support_penalization(dataset_train_targets):
-#     Commented out during cleanup: focal-loss support helper is unused.
-
-
-# def retrieve_support_weights(targets, penalties):
-#     Commented out during cleanup: focal-loss support helper is unused.
-
-
 def param_dict_to_list(dic_params: dict, class_label_dict: dict) -> list:
 
     """
