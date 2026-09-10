@@ -18,7 +18,7 @@ def build_model(params, MTL=False):
     arch_name = params["architecture"].get("name", arch_type)
     if arch_name is None:
         arch_name = arch_type
-    parent = "dcml.models."
+    parent = "src.dcml.models."
     _temp = __import__(parent + arch_type+"_models", fromlist=[arch_type])
     model_creator_func = getattr(_temp, arch_name)
 

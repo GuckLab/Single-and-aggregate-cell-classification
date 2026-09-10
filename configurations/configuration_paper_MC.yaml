@@ -276,7 +276,7 @@ create_trainer:
     name: 'mlflow'    
     experiment_name: 'Multi-Class_Approach'     
     #experiment_description: "reference, seed 7"
-    experiment_description: "debug"
+    experiment_description: "debug2"
 
 trainig_note: "40x80 crops" 
 training:

@@ -12,14 +12,14 @@ from dotenv import load_dotenv
 import torch
 from torch.utils.data import DataLoader
 
-from dcml.utils.logger import retrieve_logger
-from dcml.training import Trainer
-from dcml.evaluation.helpers import map_abbr_2_ml_score_label, map_weights_abbr_2_labels
-from dcml.utils.data import create_datasets, create_data_sampler
+from src.dcml.utils.logger import retrieve_logger
+from src.dcml.training import Trainer
+from src.dcml.evaluation.helpers import map_abbr_2_ml_score_label, map_weights_abbr_2_labels
+from src.dcml.utils.data import create_datasets, create_data_sampler
 import yaml
 from src.deepclassifier.evaluate_utils import evaluate_models, evaluate_models_on_gmm
 import mlflow
-from dcml.training.metrics import EvaluationMetrics
+from src.dcml.training.metrics import EvaluationMetrics
 import random
 import os
 import numpy as np
@@ -49,13 +49,10 @@ def main():
     parser.add_argument('--mlflow_gmm_folder_name', type=str, default="evaluation_on_gmm_measurements",
                         help='folder name within mlflow where gmm evaluation results will be stored')
     parser.add_argument('--mlflow', action='store_true', default=True, help='True for model to be saved in mlflow')
-    parser.add_argument('--seed', type=int, default=0, help='sets seed to make results reproducable')
+    parser.add_argument('--seed', type=int, default=0, help='sets seed to make results reproducible')
     parser.add_argument('--rm_pred', action='store_true', default=False, help='removes folder with predictions after evaluation')
 
     args = parser.parse_args()
-
-    # if args.seed:
-    #     set_seed(args.seed) # do not use seed, random run
 
     data_absolute_path = pathlib.Path(args.data_path).resolve()
     params = yaml.safe_load(open(args.param_file))
@@ -212,9 +209,6 @@ def main():
     for epoch in range(training_params["num_epochs"]):
         print(f"Epoch: {epoch}, {time.ctime()}", flush=True)
 
-        # # # # # # # # TODO remove - debugging
-        # trainer.evaluate(stage='val', last_epoch=True, eval_metrics=metrics_val)
-
         av_loss = trainer.train_step(epoch, every_n_batches=training_params.get("every_n_batches", 100))
 
         mlflow.log_metric(key="TRAIN - Average batch loss", value=av_loss, step=epoch)
@@ -226,7 +220,6 @@ def main():
 
         for metric_name in metric_names:
             current_metric_value = getattr(metrics_val, metric_name)
-            # print(f"{metric_name}: {current_metric_value}")
 
             if current_metric_value == getattr(metrics_val, "best_" + metric_name):
                 trainer.save_model(f"best_model_{metric_name}")
@@ -244,12 +237,10 @@ def main():
         if (epoch % training_params["eval_interval"] == 0) or last_epoch_flag:
             print("Evaluation: Validation Dataset", flush=True)
             metrics_val.print_metrics()
-            # trainer.print_metrics(scores_val)
 
             print("Evaluation: Training Dataset", flush=True)
             trainer.evaluate(stage='train', eval_metrics=metrics_train)
             metrics_train.print_metrics()
-            # trainer.print_metrics(scores_train)
 
     # log the best performances on validation set and corresponding epoch for all requested metrics
     logger.log_params(params=train_step_metrics, filename="model_epoch_val_performance.yaml")

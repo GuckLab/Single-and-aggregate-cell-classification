@@ -47,6 +47,8 @@ Main Python packages used by this project include:
 
 ## Installation
 
+Run all commands from the project root directory.
+
 Create and activate a conda environment:
 
 ```bash
@@ -69,6 +71,8 @@ The rtdc files can be browsed using the [DCscope (formerly Shape-Out)](https://s
 Place the data in the project folder `data/` (or use another location and pass it via the corresponding arguments when running training or evaluation).
 
 ## Training and evaluation
+
+Run all commands from the project root directory.
 
 To train the model, run:
 

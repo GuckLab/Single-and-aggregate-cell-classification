@@ -1,9 +1,9 @@
 from abc import ABC, abstractmethod
 # from pathlib import Path
 # from typing import Union
-from dcml.evaluation.helpers import get_key_ordered_values_from_dict, add_ml_score_prefix
-from dcml.utils.params import get_saved_params
-from dcml.utils.models import split_script_file
+from src.dcml.evaluation.helpers import get_key_ordered_values_from_dict, add_ml_score_prefix
+from src.dcml.utils.params import get_saved_params
+from src.dcml.utils.models import split_script_file
 from mlflow.pytorch import load_model as mlf_load_model
 from mlflow.pytorch import pickle_module as mlf_pickle_module
 

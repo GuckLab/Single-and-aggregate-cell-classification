@@ -2,16 +2,13 @@ import os
 import shutil
 import tempfile
 from pathlib import Path
-
-from dcml.data.utils import resolve_filepaths
-
 import mlflow
 from torch.utils.data import DataLoader
 import time
-from dcml.preprocessing.io import apply_prediction_to_dir
-from dcml.evaluation.helpers import map_abbr_2_ml_score_label, map_weights_abbr_2_labels
-from dcml.training.metrics import EvaluationMetrics
-from dcml.data import RTDCDataset
+from src.dcml.preprocessing.io import apply_prediction_to_dir
+from src.dcml.evaluation.helpers import map_abbr_2_ml_score_label, map_weights_abbr_2_labels
+from src.dcml.training.metrics import EvaluationMetrics
+from src.dcml.data import RTDCDataset
 import pandas as pd
 import torch
 from torch import Tensor
@@ -19,17 +16,17 @@ from .evaluate_measurements import evaluate_proportions_on_gmm, evaluate_confusi
 import yaml
 
 
-from dcml.evaluation.artifacts import (
+from src.dcml.evaluation.artifacts import (
     artifact_classification_report,
     artifact_confusion_matrix,
 )
 
-from dcml.models import OneModel
-from dcml.predict import predict
-from dcml.utils.data import create_single_dataset, create_datasets
+from src.dcml.models import OneModel
+from src.dcml.predict import predict
+from src.dcml.utils.data import create_single_dataset, create_datasets
 from .get_device import get_available_device_num_workers
 from typing import List
-from dcml.utils.params import get_saved_params
+from src.dcml.utils.params import get_saved_params
 
 
 
@@ -85,15 +82,7 @@ def evaluate_models(run_id: str, path_in: str, batch_size: int = 16, model_names
         else:
             raise Exception(" model names argument should either be string or list of strings")
 
-    # # remove the dataset on the disk that was created with create_datasets(),
-    # # which in turn called concatenated_hdf5_data()
-    # try:
-    #     temp_file_name = dataset.h5data.h5.file.filename
-    # except:
-    #     print("evaluate: cannot delete temporary file")
-    # else:
-    #     os.remove(temp_file_name)
-    #     dataset.h5data.close()
+
 
 
 
@@ -192,7 +181,6 @@ def model_eval(run_id: str, dataset: RTDCDataset, model_name: str = "", batch_si
         criterion=None,
         device=device,
         class_label_dict=class_label_dict
-        #free_dependent=one_model.params["create_dataset"]["free_dependent"]
     )
 
     mapping = map_abbr_2_ml_score_label(class_label_dict, trainer_params["ml_score_features"])
@@ -225,10 +213,7 @@ def model_eval(run_id: str, dataset: RTDCDataset, model_name: str = "", batch_si
             targets_compare[obs, :] = torch.tensor([eval_cond(conds[label], targets[obs, :]) for label in labels.values()])
             predictions_compare[obs, :] = torch.tensor([eval_cond(conds[label], predictions[obs, :]) for label in labels.values()])
 
-        # targets_compare = targets_compare.float()
-        # predictions_compare = predictions_compare.float()
 
-        #targets_compare, predictions_compare, labels = mapping_for_comparison(targets, predictions)
 
         metrics_to_use = trainer_params["performance_metrics"]
         metrics_to_remove = ["roc_auc_score", "average_precision_score"] # cannot be used as we do not provide scores, but only predicitons
@@ -238,7 +223,6 @@ def model_eval(run_id: str, dataset: RTDCDataset, model_name: str = "", batch_si
         metrics_compare = EvaluationMetrics(target_names=labels, used_metrics=metrics_to_use, cls_type="MTL")
 
         metrics_compare(targets_compare, predictions_compare)
-        # metrics.print_metrics()
         print("\n")
         print(pd.DataFrame(metrics_compare.report).transpose())
 
@@ -265,7 +249,6 @@ def model_eval_on_gmm(path_in, path_out, run_id: str, measurements, ml_score_fea
     train_dataset_mean = measurements_params['create_dataset']['mean']
     train_dataset_std = measurements_params['create_dataset']['std']
     train_reference_p99 = measurements_params["create_dataset"].get("p99", None)
-    #prefix = measurements_params["gmm_based_evaluation"].get("full_measurement_label", "")
 
     # run prediction for each measurement separately that begins with "full_measurement_label"
     for measurement in measurements:
@@ -275,9 +258,7 @@ def model_eval_on_gmm(path_in, path_out, run_id: str, measurements, ml_score_fea
         # Calculate statistics for each measurement (using file with a prefix that corresponds to full measurement)
         abs_path_files = [os.path.join(path_in_measurement, el) for el in Path(path_in_measurement).rglob(full_measurement_label + "*.rtdc") if el.is_file()]
 
-        # abs_path_files_temp = resolve_filepaths([path_in_measurement]) could also be used when adding possibility to add prefix
 
-        #print(abs_path_files)
         if abs_path_files:
             print("measurement file: {}".format(abs_path_files[0]))
             if len(abs_path_files) > 1:
@@ -295,8 +276,6 @@ def model_eval_on_gmm(path_in, path_out, run_id: str, measurements, ml_score_fea
                 MTL=measurements_params["create_trainer"]["architecture"]["type"] == 'multitask'
             )
 
-            # brightness_factor = train_reference_p99 / dataset.p99 if train_reference_p99 else 1.0
-            # print("brightness factor to be applied: {}".format(brightness_factor))
             apply_prediction_to_dir(path_in=path_in_measurement,
                                     path_out=path_out_measurement,
                                     model_path=run_id,
@@ -386,13 +365,9 @@ def eval_cond(cond:dict | int, arr:Tensor) -> Tensor:
             output = torch.stack([eval_cond(c, arr) for c in cond['and']]) # tensor of booleans or 1/0 floats and nan
             out_nans = torch.isnan(output)
             if torch.any(out_nans):
-            #if torch.all(out_nans):
                 return torch.tensor(torch.nan) # return nan if a nan within "and" condition
             else:
                 ou = output.all()
-                #ou = (output[~out_nans]).all()  # ignore nans
-                # ou1 = (output == 1).all() # can also be output.all()
-                # assert ou1 == ou, "not correct1"
                 return ou
 
         elif 'or' in cond:
@@ -403,8 +378,6 @@ def eval_cond(cond:dict | int, arr:Tensor) -> Tensor:
                 torch.tensor(torch.nan) # return nan if all were nan within "or" condition
             else:
                 ou = (output[~out_nans]).any()
-                # ou1 = (output == 1).any() # allows to ignore nan
-                # assert ou1 == ou, "not correct2"
                 return ou
         elif 'not' in cond:
             output = eval_cond(cond['not'], arr) # tensor of boolean or nan
@@ -413,7 +386,7 @@ def eval_cond(cond:dict | int, arr:Tensor) -> Tensor:
             else:
                 return ~output # returns False if output is nan
     elif isinstance(cond, int):
-        #return arr[cond].bool()
+
         if arr[cond] == 1:
             return torch.tensor(True)
         elif arr[cond] == 0:
@@ -423,43 +396,6 @@ def eval_cond(cond:dict | int, arr:Tensor) -> Tensor:
     else:
         raise ValueError('Invalid condition')
 
-
-# if __name__ == "__main__":
-#     parser = argparse.ArgumentParser()
-#     parser.add_argument('--path_in', type=str, help='Input folder path')
-#     parser.add_argument('--path_out', type=str, default="", help='Output folder path for predictions on test set')
-#     parser.add_argument('--path_in_gmm', type=str, default="", help='Input folder path for GMM test data')
-#     parser.add_argument('--path_out_gmm_pred', type=str, default="", help='Output folder path for predictions on GMM set')
-#     parser.add_argument('--mlflow_gmm_folder_name', type=str, default="evaluation_on_gmm_measurements",
-#                         help='folder name within mlflow where gmm evaluation results will be stored')
-#     parser.add_argument('--model', type=str, help='model run_id')
-#     parser.add_argument('--batch_size', action='store_true', default=16)
-#     parser.add_argument('--rm_pred', action='store_true', default=False, help='removes folder with predictions after evaluation')
-#
-#     args = parser.parse_args()
-#
-#
-#
-#     # evaluate_model(args.model, args.path_in, path_out=args.path_out, model_name = "best_model_f1",
-#     #                batch_size=args.batch_size)
-#     # evaluate_model(args.model, args.path_in, model_name="best_model_f1", batch_size=args.batch_size)
-#
-#     # evaluate_models(args.model, args.path_in, model_names=["best_model_f1",
-#     #                                                        "best_model_accuracy"], batch_size=args.batch_size)
-#
-#     #evaluate_models(args.model, args.path_in, model_names=["best_model_f1"], batch_size=args.batch_size)
-#
-#     evaluate_models(args.model, args.path_in, model_names=["best_model_bal_acc"], batch_size=args.batch_size)
-#
-#
-#     if args.path_in_gmm:
-#
-#         # model evaluation on GMM data
-#         print("starting evaluation on GMM test dataset")
-#
-#         evaluate_models_on_gmm(args.model, args.path_in_gmm, path_out_gmm_pred=args.path_out_gmm_pred,
-#                                model_names=["best_model_bal_acc"], remove_predictions=args.rm_pred,
-#                                mlflow_folder_name=args.mlflow_gmm_folder_name)
 
 
 

@@ -13,11 +13,11 @@ import h5py
 import numpy as np
 from torch.utils.data import DataLoader
 
-from .images import correct_background
+#from .images import correct_background
 from ..io import load_ml_score_to_int
 from ..models import OneModel
-from dcml.utils.data import create_single_dataset
-from dcml.predict import predict
+from src.dcml.utils.data import create_single_dataset
+from src.dcml.predict import predict
 
 logger = logging.getLogger(__name__)
 

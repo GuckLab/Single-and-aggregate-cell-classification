@@ -1,4 +1,4 @@
-from dcml.logger import MLflowLogger  # TensorboardLogger
+from src.dcml.logger import MLflowLogger  # TensorboardLogger
 
 
 def retrieve_logger(logger_params, class_label_dict, log_dir=None):

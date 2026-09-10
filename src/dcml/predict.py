@@ -1,8 +1,6 @@
 import torch
 from torch import nn
 from torch.utils.data import DataLoader
-import numpy as np
-import time
 from torch import Tensor
 import re
 
@@ -19,8 +17,6 @@ def MC_prediction(probs: Tensor, thr=0.5):
     -------
     preds - tensor of size N with integer predictions (index of the correct class)
     """
-    # TODO do I need these conversions to numpy? why not to use tensors?
-    # TODO I can also avoid using list, why not just concatenating tensors?
     _, preds = torch.max(probs, 1)
 
     return preds
@@ -60,74 +56,6 @@ def mtl_full_prediction(mtl_scores, wbc_ind, aggr_ind, mc_scores, thr, free_depe
     preds_mtl[:, wbc_ind] = pred_wbc
 
     return preds_mtl, pred_mc
-
-
-# def MTL_mtl_prediction(mtl_scores: Tensor, mtl_thr: float, aggr_ind: int) -> Tensor:
-#     """
-#     MTL prediction logic for main MTL classes: if aggr = False (after thresholding), only single maximal entry from other
-#     entries in the row will be True, namely the one with the highest score from the entries other than aggr.
-#     Currently implemented with a single threshold for all scores.
-#
-#     Parameters
-#     ----------
-#     mtl_scores - Tensor with the shape NxL, with N the number of samples, and L the number of MTL features (5 currently)
-#     mtl_thr
-#     aggr_ind
-#
-#     Returns
-#     -------
-#     preds_mtl - Tensor of the same shape as  mtl_scores, but with boolean values """
-#
-#     # make predictions
-#     preds_mtl = mtl_scores >= mtl_thr
-#
-#     # refine predictions, with the logic: if aggr = 0, only single maximal entry from other entries can be 1,
-#     # namely the one with the highest score from the entries other than aggr
-#     for i in range(preds_mtl.shape[0]):
-#         if preds_mtl[i, aggr_ind] == False: # if no aggregation
-#             scores = mtl_scores[i].clone() # scores for one sample
-#
-#             # find maximal value and its index for entries beside aggr.
-#             scores[aggr_ind] = -np.inf
-#             max_val, max_ind = torch.max(scores, 0)
-#
-#             # set True for a single entry if it is higher than a threshold
-#             preds_mtl[i, :] = False
-#             if max_val >= mtl_thr:
-#                 preds_mtl[i, max_ind] = True
-#
-#     return preds_mtl
-
-
-# def MTL_mtl_prediction2(mtl_scores: Tensor, mtl_thr: float, aggr_ind: int) -> Tensor:
-#     """
-#     MTL prediction logic for main MTL classes: all MTL classes are thresholded independently of each other.
-#     If more than one class except aggregation is predicted (True), then also aggregation feature is set True.
-#     Otherwise, aggregation feature is not changed after thresholding (so it can be that we have aggr=true, but only one
-#     of cell types was detected).
-#     Currently implemented with a single threshold for all scores.
-#
-#     Parameters
-#     ----------
-#     mtl_scores - Tensor with the shape NxL, with N the number of samples, and L the number of MTL features (5 currently)
-#     mtl_thr
-#     aggr_ind
-#
-#     Returns
-#     -------
-#     preds_mtl - Tensor of the same shape as  mtl_scores, but with boolean values """
-#
-#     # make predictions
-#     preds_mtl = mtl_scores >= mtl_thr
-#
-#     # create a tensor without aggregation column
-#     preds_mtl_no_aggr = torch.cat((preds_mtl[:, :aggr_ind], preds_mtl[:, aggr_ind+1:]), dim=1)
-#     mult_det = preds_mtl_no_aggr.sum(dim=1) > 1
-#
-#     preds_mtl[mult_det, aggr_ind] = True
-#
-#     return preds_mtl
-
 
 def MTL_mtl_prediction3(mtl_scores: Tensor, mtl_thr: float, aggr_ind: int, free_dependent_aggr: tuple=([], [])) -> Tensor:
     """
@@ -194,9 +122,6 @@ def MTL_mc_prediction(outputs_mc: Tensor, pred_wbc: Tensor):
     # mc one-hot prediction only if WBC
     pred_mc[~pred_wbc] = 0
 
-    # high_prob = outputs_mc[torch.arange(outputs_mc.size(0)), preds_mc_ind] > 0.8
-    # pred_mc[~high_prob, :] = 0
-
     return pred_mc, pred_wbc
 
 def find_dependent_aggregations(inv_dic: dict, aggr_word: str):
@@ -222,7 +147,6 @@ def find_dependent_aggregations(inv_dic: dict, aggr_word: str):
     free_inds = []
     aggr_inds = []
     for lab in labels:
-        #lab_parts = lab.rsplit(' ', 1)
         lab_parts = re.split('[ _]+', lab) # split string based on either empty space or an underscore
         if len(lab_parts) > 1:
             agg_label = lab_parts[-1] # dependent label - last split part
@@ -275,9 +199,6 @@ def predict(model: nn.Module, dataloader: DataLoader, criterion, device, class_l
     with_targets = True
     with torch.no_grad():
         for n_batch, batch in enumerate(dataloader):
-            # # # TODO remove debugging
-            # if n_batch > 100:
-            #     break
 
             inputs = batch["image"].to(device)
 
@@ -288,7 +209,6 @@ def predict(model: nn.Module, dataloader: DataLoader, criterion, device, class_l
                     target_values = torch.cat((target_values, targets), dim=0)
                 else:
                     targets = targets.long().to(device)
-                    # target_values.extend(targets.cpu().numpy().astype(int))
                     target_values = torch.cat((target_values, targets), dim=0)
             else:
                 with_targets = False
@@ -317,11 +237,6 @@ def predict(model: nn.Module, dataloader: DataLoader, criterion, device, class_l
                 for aggr_ind, free_ind in zip(aggr_inds, free_inds):
                     outputs_mtl[:, aggr_ind] = outputs_mtl[:, aggr_ind] * outputs_mtl[:, free_ind]
 
-                # outputs_mtl[:, 1] = outputs_mtl[:, 1] * outputs_mtl[:, 0] # RBC aggregation update
-                # outputs_mtl[:, 4] = outputs_mtl[:, 4] * outputs_mtl[:, 3] # thrombocytes aggregation update
-                # #outputs_mtl[:, 3] = outputs_mtl[:, 3] * outputs_mtl[:, 2]  # thrombocytes aggregation update
-                # #outputs_mtl[:, 6] = outputs_mtl[:, 6] * outputs_mtl[:, 7]  # WBC aggregation update
-                # #outputs_mtl[:, 5] = outputs_mtl[:, 5] * outputs_mtl[:, 6]  # WBC aggregation update
 
                 preds_mtl, pred_mc = mtl_full_prediction(outputs_mtl, ind_wbc_class, ind_aggregation_class, outputs_mc, pred_thr, free_dependent_aggr=(free_inds, aggr_inds))
 
@@ -361,7 +276,7 @@ def check_predictions_logic(predictions, ind_wbc, ind_aggr):
     condition = torch.all((n_single_mtl == 0) | (n_single_mtl == 1))
     assert condition, "if aggregation detected, either none or a single mtl output should be detected"
 
-    # TODO add tests
+
 
 
 

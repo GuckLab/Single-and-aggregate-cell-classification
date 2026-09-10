@@ -21,19 +21,7 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
 
-
-
-    # evaluate_model(args.model, args.path_in, path_out=args.path_out, model_name = "best_model_f1",
-    #                batch_size=args.batch_size)
-    # evaluate_model(args.model, args.path_in, model_name="best_model_f1", batch_size=args.batch_size)
-
-    # evaluate_models(args.model, args.path_in, model_names=["best_model_f1",
-    #                                                        "best_model_accuracy"], batch_size=args.batch_size)
-
-    #evaluate_models(args.model, args.path_in, model_names=["best_model_f1"], batch_size=args.batch_size)
-
-    # TODO bring it back
-    #evaluate_models(args.model, args.path_in, model_names=["best_model_bal_acc"], batch_size=args.batch_size)
+    evaluate_models(args.model, args.path_in, model_names=["best_model_bal_acc"], batch_size=args.batch_size)
 
 
     if args.path_in_gmm:
