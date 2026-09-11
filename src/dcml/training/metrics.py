@@ -360,13 +360,13 @@ class EvaluationMetrics:
                               torch.sum(targets[wbc_indexes, (self.wbc_ind + 1):] == 1, dim=1)
             ), "warning: for each object with WBC, MC labels must be either all nan or have a single one among all other zeros"
 
-            # for each object without WBC, all MC labels must be zeros or all must ne nan
+            # for each object without WBC, MC labels must be all zeros or all nan
             assert torch.all(
                               torch.all(torch.isnan(targets[not_wbc_indexes, (self.wbc_ind + 1):]), dim=1) |
                               torch.all(targets[not_wbc_indexes, (self.wbc_ind + 1):] == 0, dim=1)
             ), "warning: for each object without WBC, all MC labels must be zeros or all must ne nan"
 
-            # for each object without unknown WBC, all MC labels must be nans
+            # for each object with unknown WBC, all MC labels must be nans
             assert torch.all(torch.isnan(targets[unknown_wbc_indexes, (self.wbc_ind + 1):])), "warning: unknown WBC type should have all MC labels as nan"
 
             assert targets.shape[1] == len(self.target_names)
@@ -386,10 +386,6 @@ class EvaluationMetrics:
             ml_targets, ml_predictions = self._multiclass_to_multilabel(self.targets, self.predictions)
             bal_acc_scores = balanced_accuracy(ml_targets, ml_predictions)
 
-            # gives exactly the same results for MC as when metrics.precision_recall_fscore_support(self.targets, self.predictions) is used
-            # scores = multi_label_metrics_precision_recall_fscore_support(ml_targets, ml_predictions)
-
-
 
         assert len(scores[0]) == len(self.target_names), ("not proper number of classes, probably batch does "
                                                           "not contain indexes for all the classes")
@@ -402,7 +398,6 @@ class EvaluationMetrics:
                                                                                          self.prediction_scores)
             else:
 
-                # multi_class="ovr" is only relevant for multi-class not multi-label
                 self.roc_auc_score_per_class = metrics.roc_auc_score(self.targets, self.prediction_scores, average=None, multi_class="ovr")
                 self.average_precision_score_per_class = metrics.average_precision_score(self.targets, self.prediction_scores, average=None)
 
