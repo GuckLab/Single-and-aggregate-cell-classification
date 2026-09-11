@@ -1,13 +1,12 @@
 create_dataset:
-  train_size: 0.8 #0.75
-  crop_size: [80, 40] #[80, 80] # #80
+  train_size: 0.8
+  crop_size: [80, 40]
   mean: 0.524
   std: 0.093
   p99:  0.6122
   hdf5_paths:
     train:
       - train_data/ml_score_g1b/fl_data/Lena
-      #- train_data/ml_score_g1b/fl_data
       - train_data/ml_score_g1e/fl_data/Lena
       - train_data/ml_score_g1e/fl_data/Manu/Leukocyte_stainings/20220908_Manu_LC_Blood_stainings
       - train_data/ml_score_g1e/fl_data/Manu/Leukocyte_stainings/20220912_Manu_LC_Blood_stainings
@@ -15,14 +14,14 @@ create_dataset:
       - train_data/ml_score_g1e/fl_data/Manu/Leukocyte_stainings/20220926_Manu_LC_Blood_stainings
       - train_data/ml_score_g1e/fl_data/Manu/Leukocyte_stainings/20221202_Manu_LC_Blood_stainings
       - train_data/ml_score_g1m/fl_data/Manu/Leukocyte_stainings #
-      - train_data/ml_score_g1m/fl_data/Manu/2nd_round_monocytes_negative # added #
+      - train_data/ml_score_g1m/fl_data/Manu/2nd_round_monocytes_negative
       - train_data/ml_score_g1m/fl_data/Lena  #
       - train_data/ml_score_g1n/fl_data/Lena/20230119_01_Mono
       - train_data/ml_score_g1n/fl_data/Lena/20230123_02_Mono
       - train_data/ml_score_g1n/fl_data/Lena/20230227_09_Mono
       - train_data/ml_score_g1n/fl_data/Lena/20230306_11_Mono
       - train_data/ml_score_g1n/fl_data/Lena/20230310_13_Mono
-      - train_data/ml_score_g1n/fl_data/Lena/20230315_15_Mono   # newborn
+      - train_data/ml_score_g1n/fl_data/Lena/20230315_15_Mono
       - train_data/ml_score_g1n/fl_data/Lena/20230414_17_Monos
       - train_data/ml_score_g1n/fl_data/Manu/Leukocyte_stainings/20220908_Manu_LC_Blood_stainings/no3_BH425-01_CD14_CD666_CD16
       - train_data/ml_score_g1n/fl_data/Manu/Leukocyte_stainings/20220912_Manu_LC_Blood_stainings/no3_BH426-01_CD14_CD666_CD16
@@ -32,13 +31,11 @@ create_dataset:
       - train_data/ml_score_g1n/fl_data/Manu/Leukocyte_stainings/20221202_Manu_LC_Blood_stainings/no2_FR073-01_CD14_CD66_CD16
       - train_data/ml_score_l10/fl_data/Manu/Leukocyte_stainings #
       - train_data/ml_score_l10/fl_data/Lena
-      - train_data/ml_score_l10/fl_data/Manu/2nd_round_lymphocytes_in_focus # added
+      - train_data/ml_score_l10/fl_data/Manu/2nd_round_lymphocytes_in_focus
       - train_data/ml_score_r1f
       - train_data/ml_score_r1u
       - train_data/ml_score_r20
       - train_data/ml_score_r30
-    #  - train_data/ml_score_rn0 #
-    #  - train_data/ml_score_mn0/fl_data # remove
       - train_data/ml_score_r1r
       - train_data/ml_score_r1n
       - train_data/ml_score_t1f/fl_data
@@ -46,13 +43,7 @@ create_dataset:
       - train_data/ml_score_t1r/fl_data
       - train_data/ml_score_tns/fl_data
       - train_data/ml_score_tnl/fl_data
-
-
-    #  - train_data/ml_score_tnr/fl_data # TODO remove it
-    #  - train_data/ml_score_tnw/fl_data
-
-    #  - train_data/ml_score_wn0/fl_data
-      - train_data/ml_score_t1w/fl_data # added
+      - train_data/ml_score_t1w/fl_data
 
     test:
       - test_data/ml_score_g1b/fl_data/Lena
@@ -65,8 +56,6 @@ create_dataset:
       - test_data/ml_score_r1u
       - test_data/ml_score_r20
       - test_data/ml_score_r30
-    #  - test_data/ml_score_rn0 #
-    #  - test_data/ml_score_mn0/fl_data  # rem
       - test_data/ml_score_r1r
       - test_data/ml_score_r1n
       - test_data/ml_score_t1f/fl_data
@@ -74,38 +63,26 @@ create_dataset:
       - test_data/ml_score_t1r/fl_data
       - test_data/ml_score_tns/fl_data
       - test_data/ml_score_tnl/fl_data
-    #  - test_data/ml_score_tnm/fl_data
+      - test_data/ml_score_wn0/fl_data # multiple WBCs
+      #- test_data/ml_score_t1w/fl_data  # remove for testing multiple WBCs
 
-      #- test_data/ml_score_tnr/fl_data
-      #- test_data/ml_score_tnw/fl_data # for test multiple WBCs - remove
-
-      - test_data/ml_score_wn0/fl_data # TODO multiple WBCs
-      #- test_data/ml_score_t1w/fl_data  # for test multiple WBCs - remove
-
-      - train_data/ml_score_wn0/fl_data # TODO multiple WBCs
-
-
-
-
-
-
-  correct_background: False  # default is True
+  correct_background: False
   sampler:
     type: weightedRandomSampler
-    #num_samples: 100 # 500 #3000 #500 # 55000 #3000 # comment or delete this line if you want sampler to use length of dataset as num_samples
+    #num_samples: 100 # comment or delete this line if you want sampler to use length of dataset as num_samples
   required_data:
     image: image
     #image_bg: image_bg
     target: cell_class_labels
   target_grouping: # numbers in brackets correspond to the original classes in dcml/definitions/ml_score_to_int.json
   # The first classes must be for Multi-task learning, the last classes are for multiclass learning
-    0: [ 1, 2, 3, 4, 5, 25, 28, 30, 16] #  16, 32 excluded ->RBC
+    0: [ 1, 2, 3, 4, 5, 25, 28, 30, 16] # ->RBC
     1: [3, 4, 5] # -> RBC aggregation
     2: [ 22 ] #  ->Nucleated_RBC
-    3: [ 13, 14, 35, 36, 28, 29, 30, 31] #  31, 32 is excluded  -> Thrombocyte
-    4: [30, 35, 36, 31] # -> thrombocyte aggregation 31 excluded
-    5: [ 3, 4, 5, 35, 36, 28, 29, 30, 16, 12, 31] #   out 16, 12, 31, 32 are excluded -> Aggr always shares with some other class; Group of RBCs RBC_multiple ( RBC_doublet_and_no_or_small_thrombocytes (ml_score_r20) + RBC_triplet_and_no_or_small_thrombocytes (ml_score_r30) + RBC_multiple_and_no_or_small_thrombocytes(ml_score_rn0))
-    6: [ 9, 10, 11, 8, 6, 29, 31, 12] # 16, 12, 31, 32 are excluded ->WBC. always shares with some other class
+    3: [ 13, 14, 35, 36, 28, 29, 30, 31] #  -> Thrombocyte
+    4: [30, 35, 36, 31] # -> thrombocyte aggregation
+    5: [ 3, 4, 5, 35, 36, 28, 29, 30, 16, 12, 31] #   -> Aggr always shares with some other class
+    6: [ 9, 10, 11, 8, 6, 29, 31, 12] # ->WBC. always shares with some other class
     #right next to the WBC class there should be WBC subtypes and nothing else
     7: [ 9 ] #  Eosinophil, should also appear in WBC, should follow MTL classes
     8: [ 11 ] #  Monocyte, should also appear in WBC
@@ -116,10 +93,10 @@ create_dataset:
   # Some images have indefinite appearance of the objects of specific categories.
   # For example 30: Thrombocyte clot and RBC(s) is indefinite for category 1: RBC aggregations
   unknowns_target_grouping_test:
-    3: [12, 16, 5] # (3), (4), 5 are removed [ 3, 4, 5, 12, 16] # TODO 12 is out, can also be out here
+    3: [12, 16, 5]
     1: [30, 16]
-    4: [28, 29, 12, 16, 5] #   (3), (4), 5 are removed  [28, 29, 3, 4, 5, 12, 16]
-    7: [29, 16, 12, 31] # not neccessary needed
+    4: [28, 29, 12, 16, 5]
+    7: [29, 16, 12, 31] # not necessary needed
     8: [29, 16, 12, 31]
     9: [29, 16, 12, 31]
     10: [29, 16, 12, 31]
@@ -133,9 +110,9 @@ create_dataset:
   # is trained only on images either with single or many RBCs. Ignored classes must be subset of ignored classes in
   # unknowns_target_grouping_test
   unknowns_target_grouping_train_val:
-    3: [12, 16, 5] #  (3), (4), 5 are removed   # TODO 12 is out, can also be out here
-    1: [ 30, 16, 22, 13, 14, 35, 36, 29, 9, 10, 11, 8, 6] #  [22, 13, 14, 35, 36, 29, 9, 11, 8, 6] - are removed # for new architecture
-    4: [ 28, 29, 12, 16, 5, 1, 2, 25, 22, 9, 10, 11, 8, 6] # [1, 2, 25, 22, 9, 11, 8, 6 ] - are removed # 3, 4, 5 are removed for new architecture
+    3: [12, 16, 5] #
+    1: [ 30, 16, 22, 13, 14, 35, 36, 29, 9, 10, 11, 8, 6] #
+    4: [ 28, 29, 12, 16, 5, 1, 2, 25, 22, 9, 10, 11, 8, 6] #
     7: [ 29, 16, 12, 31, 1, 2, 3, 4, 5, 25, 28, 30, 22, 13, 14, 35, 36, 30 ]
     8: [ 29, 16, 12, 31, 1, 2, 3, 4, 5, 25, 28, 30, 22, 13, 14, 35, 36, 30 ]
     9: [ 29, 16, 12, 31, 1, 2, 3, 4, 5, 25, 28, 30, 22, 13, 14, 35, 36, 30 ]
@@ -161,7 +138,7 @@ create_dataset:
     ml_score_mn0: 16 # Mixed cells (WBC+RBC + thr(s)) multiple with no or little thrombocyte(s)
     ml_score_ds0: 17 #deprecated
     ml_score_dl0: 18 #deprecated
-    ml_score_tn0: 19 #deprecated - looks bad in the training set
+    ml_score_tn0: 19 #deprecated
     ml_score_m20: 20 #deprecated
     ml_score_buk: 21 #deprecated
     ml_score_r1n: 22 # Nucleated RBC
@@ -170,8 +147,8 @@ create_dataset:
     ml_score_r1r: 25 # RBC singlet round
     ml_score_w10: 26 #deprecated
     ml_score_w20: 27 #deprecated
-    ml_score_t1r: 28 # # RBC and a small amount of thrombocyte(s). This one could be confused with RBCs
-    ml_score_t1w: 29 #deprecated (currently - because we don't know which WBC is it)
+    ml_score_t1r: 28 # # RBC and a small amount of thrombocyte(s).
+    ml_score_t1w: 29 # WBC and a small amount of thrombocyte(s).
     ml_score_tnr: 30 # Thrombocyte clot and RBC(s)
     ml_score_tnw: 31 # Thrombocyte clot and WBC(s) # (sometimes also RBC appears there)
     ml_score_tnm: 32 # Thrombocyte clot and WBC(s) and RBC(s)
@@ -183,27 +160,15 @@ create_dataset:
   augmentation:
     ApplyRandomVerticalFlip:
       p: 0.5
-#    ApplyInversion:
-#      p: 0.5
-#    AdjustSharpness:
-#      sharpness_range:
-#        - 0.0
-#        - 1.0
-#      p: 0.5
     AdjustGamma:
       gamma_range:
-        - 0.85 #0.7 #0.5
-        - 1.15 #1.5 #2.5
+        - 0.85
+        - 1.15
       p: 0.9
-#    AdjustBrightnessMult:
-#      brightness_range:
-#        - 0.7 #0.85 #0.7 #
-#        - 1.3 #1.15 #1.3 #
-#      p: 0.9
     AdjustBrightnessShift:
       brightness_range:
-        - -0.15 #0.2 #0.15 #-0.3 #
-        - 0.15 #0.2 #0.15 #0.3 #
+        - -0.15
+        - 0.15
       p: 0.9
     AdjustContrast:
       contrast_range:
@@ -218,20 +183,16 @@ create_dataset:
         - 5
       sigma:
         - 0.5
-        - 1.2 #1.2
+        - 1.2
       p: 0.5
     ApplyGaussianNoise:
       mean: 0.0
-      sigma: 0.01 # 0.1
+      sigma: 0.01
       p: 0.5
-#    ApplyRandomRotation:
-#      angle_limit: 10
-#      p: 0.9
 
 create_trainer:
-  batch_size: 16  # TODO try larger batch size? such that every batch would contain labels from all classes
+  batch_size: 16
   class_label_dict:
-    #0: "Basophil"
     0: "Erythrocyte"
     1: "Erythrocyte_clot" # "clot" is reserved in the code name, separatpr must be either an empty space or underscore
     2: "Nucleated_Erythr."
@@ -272,7 +233,7 @@ create_trainer:
     10: "l10"
     11: "g1b"
 
-  class_weights: # TODO move it to criterion (used in cross entropy )
+  class_weights:
     0: 1
     1: 1
     2: 1
@@ -321,10 +282,10 @@ create_trainer:
     - bal_acc
 #    - roc_auc_score
 #    - average_precision_score
-  #  - weighted_fb_weighted_beta # TODO does not work now?
+
 
   criterion:
-    type: 'MultiTaskCrossEntropy' # 'cross_entropy' #'focal' # 'supportWeightedFocal'
+    type: 'MultiTaskCrossEntropy' # 'cross_entropy'
 #    inv_costs:
 #      - [ 1, 0, 0, 0, 0 ]
 #      - [ 0, 1, 0, 0, 0 ]
@@ -332,118 +293,49 @@ create_trainer:
 #      - [ 0, 0, 0, 1, 0 ]
 #      - [ 0, 0, 0, 0, 1 ]
 
-#    costs:
-#      - [ 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 ]
-#      - [ 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1 ]
-#      - [ 300, 300, 0, 1, 1, 300, 300, 300, 300, 300, 300 ]
-#      - [ 300, 1, 1, 0, 1, 300, 300, 300, 300, 300, 300 ]
-#      - [ 300, 1, 1, 1, 0, 300, 300, 300, 300, 300, 300 ]
-#      - [ 300, 300, 300, 300, 300, 0, 1, 1, 1, 300, 300 ]
-#      - [ 300, 300, 300, 300, 300, 300, 0, 1, 1, 1, 300 ]
-#      - [ 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1 ]
-#      - [ 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1 ]
-#      - [ 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1 ]
-#      - [ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0 ]
-#    #confidence: [ 1, 1, 0.1, 0.1, 0.1, 0.1, 0.1, 1, 1, 1, 1 ]
-#    confidence: [ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 ]
+    task_weights: [1, 1, 1, 1, 1, 1, 1]
+    MTL_MC_weights: [1, 1]
+    MC_class_weights: [1, 1, 1, 1, 0.5]
 
-#    pos_weights:
-#      "Erythrocyte": 3.42
-#      "Erythrocyte clot": 7.22
-#      "Nucleated_Erythr.": 7.15
-#      "Thrombocyte": 4.04
-#      "Thrombocyte clot": 7.00
-#      "Aggregation": 2.56
-#      "wbc": 0.97
-
-    task_weights: [1, 1, 1, 1, 1, 1, 1] # TODO use dictionary
-    MTL_MC_weights: [1, 1] # TODO use dictionary
-    MC_class_weights: [1, 1, 1, 1, 0.5] # TODO use dictionary MC
-#    inv_costs:
-#      - [ 1, 0.5, 0.5, 0, 0, 0, 0, 0, 0, 0 ]
-#      - [ 0, 1, 0.4, 0, 0, 0, 0, 0, 0, 0 ]
-#      - [ 0, 0, 1, 0, 0, 0, 0, 0, 0, 0 ]
-#      - [ 0, 0, 0, 1, 0, 0, 0, 0, 0, 0 ]
-#      - [ 0, 0, 0, 0, 1, 0.2, 0, 0.3, 0, 0]
-#      - [ 0, 0, 0, 0, 0, 1, 0, 0, 0, 0 ]
-#      - [ 0, 0, 0, 0, 0, 0, 1, 0, 0.4, 0 ]
-#      - [ 0, 0, 0, 0, 0.4, 0, 0, 1, 0, 0 ]
-#      - [ 0, 0, 0, 0, 0, 0, 0.4, 0, 1, 0 ]
-#      - [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 ]
-#    costs:
-#      - [ 0, 1, 1, 1, 1, 1, 1, 1, 1, 1 ]
-#      - [ 300, 0, 1, 1, 300, 300, 300, 300, 300, 300 ]
-#      - [ 300, 300, 0, 1, 300, 300, 300, 300, 300, 300 ]
-#      - [ 300, 300, 1, 0, 300, 300, 300, 300, 300, 300 ]
-#      - [ 300, 300, 300, 300, 0, 1, 1, 1, 300, 300 ]
-#      - [ 300, 300, 300, 300, 300, 0, 1, 1, 1, 300 ]
-#      - [ 1, 1, 1, 1, 1, 1, 0, 1, 1, 1 ]
-#      - [ 1, 1, 1, 1, 1, 1, 1, 0, 1, 1 ]
-#      - [ 1, 1, 1, 1, 1, 1, 1, 1, 0, 1 ]
-#      - [ 1, 1, 1, 1, 1, 1, 1, 1, 1, 0 ]
-#    confidence: [ 1, 0.5, 0.7, 0.7, 0.5, 0.5, 1, 1, 1, 1 ]
-    #confidence: [ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 ]
-    # alpha: 0.5  # used for focal loss only
-    # gamma: 2.0  # used for focal loss only
-    # reduction: 'mean'  # used for focal loss only
   architecture:
-    type: 'multitask' #'efficientnet_b0' #'resnetC' #'resnet50' #'efficientnet_b0'
+    type: 'multitask' #'efficientnet_b0' #'resnetC' #'resnet50'
     name: 'MT_EfficientNet' #'efficientnet_b0_5'
     params:
-#      layers: [2,2,2,2] # for ResNet 18c
-#      inplanes: 18 # for ResNet 18c
-#      input_dim: 1 # for Resnet 18c
        pretrained: True
-  lr: 0.0001 #0.0005 # # #0.00015 # TODO bring it back to 0.0005? should this be reduced?
-  name: "test_efficientnet_b0_architecture" #"test_resnet50_architecture" #"test_efficientnet_b0_architecture"
+  lr: 0.0001
+  name: "test_efficientnet_b0_architecture" #"test_resnet50_architecture"
   optimizer: Adam
   scheduler:
     type: 'StepLR'
-    step_size: 6 #15 #10 #6 # TODO bring it back
+    step_size: 6
     gamma: 0.1
   logger:
     name: 'mlflow'
-    #experiment_name: 'revised_groups_CEwithCosts' #'test_resnet50_architecture'#'test_efficientnet_b0_architecture'
-    experiment_name: 'Multi-Task_Approach' #'test_resnet50_architecture'#'test_efficientnet_b0_architecture'
-    #experiment_description: ""
-    # experiment_description: "temp_architecture_with_RBC, Thr aggr trained on the corr cell types, RBC+WBC used for training, no 30 for training"
-    #experiment_description: "0_0001 learning rate, shared MLP, 2 layer heads, only ReLu, only old Manu mono"
-    #experiment_description: "28, 29, 12, 16 - encode sure absence of thrombocyte aggregate - known labels, required absence in test"
-    experiment_description: "WBC aggr, seed 57"
+    experiment_name: 'Multi-Task_Approach' #'test_resnet50_architecture'
+    experiment_description: "WBC aggr, seed 7"
 
-
-trainig_note: "40x80 crops" #"Test resnet50" #"Test efficientnet_b0"
+trainig_note: "40x80 crops"
 training:
   checkpoint_interval: 4
   eval_interval: 5 # in epochs between evaluations on train and validation printed on the screen
   every_n_batches: 100 # show loss every_n_batches in each epoch
-  num_epochs: 20 #20 # 20 #25 # 25 #2 # 10 #25
-  seed: 57
+  num_epochs: 20
+  seed: 7
 
 gmm_based_evaluation:
 
   # folder names
   measurements:
-    - 'M001_data_dce'
-    - 'M002_data_dce'
-    - 'M003_data_dce'
-    - 'M004_data_dce'
-    - 'M005_data_dce'
-#    - 'M001_data_dce_BR'
-#    - 'M002_data_dce_BR'
-#    - 'M003_data_dce_BR'
-#    - 'M004_data_dce_BR'
-#    - 'M005_data_dce_BR'
-##    - 'M001_data_dce_FO'  # TODO bring it back
-##    - 'M002_data_dce_FO'
+    - 'measurement'
+  #  - 'M001_data_dce'
+
 
   # codes from predictions (single cells) that need to be displayed in confusion matrix have not empty values, values are the beginning of the file names in the labeled data
   measurement_labels:
     'ml_score_g1n': 'Neut'
     'ml_score_l10': "Lym"
     'ml_score_g1m': "Mono"
-    'ml_score_g1e': "Eos"
-    #'ml_score_rbc': "rbc"
+    'ml_score_g1e': ""
     'ml_score_rbc': ""
     'ml_score_g1b': ""
     'ml_score_rba': ""
@@ -452,9 +344,9 @@ gmm_based_evaluation:
     'ml_score_rbn': ""
     'ml_score_agg': ""
 
-  full_measurement_label: "Full"
+ # full_measurement_label: "Full"
 
-  single_cell: False # TODO change it to False
+  single_cell: False
 
   proportions: # proportions to be computed. Lists should contain names of ml codes
     notWBC:
@@ -473,34 +365,25 @@ comparative_evaluation:
 
   detection_matrix:
     Basophil:
-    #  11
       and:
         - 11
         - not: 5
     Eosinophil:
-    #  7
       and:
         - 7
         - not: 5
     Monocyte:
- #     8
       and:
         - 8
         - not: 5
     Neutrophil:
- #     9
       and:
         - 9
         - not: 5
     Lymphocyte:
- #     10
       and:
         - 10
         - not: 5
-##    Erythrocyte:
-##      and:
-##        - 0
-##        - not: 5
     Erythrocyte:
       and:
         - 0
@@ -510,31 +393,11 @@ comparative_evaluation:
       and:
         - 2
         - not: 5
-#    Thrombocyte:
-#      and:
-#        - 3
-#        - not: 5
     Thrombocyte:
       and:
         - 3
         - not: 4
         - not: 5
-#    Erythrocyte_aggr+thr?:
-#      and:
-#        - and: [ 0, 5 ]
-#        - not: 2
-#        - not: 6
-#    ErythrocyteAggr+(thr(s)):
-#      and:
-#        - 1
-#        - not: 2
-#        - not: 6
-#    ErythrocyteAggr+(thr):
-#      and:
-#        - 1
-#        - not: 2
-#        - not: 6
-#        - not: 4
     ErythrocyteAggr:
       and:
         - 1
@@ -542,13 +405,6 @@ comparative_evaluation:
         - not: 6
         - not: 4
         - not: 3
-#    Thr_aggr:
-#      and:
-#        - and: [ 3, 4 ]
-#        - not: 0
-#        - not: 1
-#        - not: 2
-#        - not: 6
     Thr_clot:
       and:
         - 4
@@ -556,37 +412,6 @@ comparative_evaluation:
         - not: 1
         - not: 2
         - not: 6
-#    WBC_thr: # TODO remove it
-#      and:
-#        - 6
-#        - 3
-#        - not: 0
-#        #- not: 1 # not neccessary
-#        - not: 2
-#        - not: 4
-#    WBC_thr(s):
-#      and:
-#        - 6
-#        - 3
-#        - not: 0
-#        - not: 2
-#    #    - not: 4
-
-#    Erythrocyte_Thr:
-#      and:
-#        - 0
-#        - 3
-#        - not: 1
-#        - not: 2
-#        - not: 4
-#        - not: 6
-
-#    Erythrocyte_s?_Thr_?s:
-#      and:
-#        - 0
-#        - 3
-#        - not: 2
-#        - not: 6
 
     Erythrocyte_Thr(s):
       and:
@@ -595,75 +420,13 @@ comparative_evaluation:
         - not: 1
         - not: 2
         - not: 6
-    #    - not: 4
-
-#    Erythrocyte_Thr:
-#      and:
-#        - 0
-#        - 3
-#        - not: 1
-#        - not: 2
-#        - not: 6
-#        - not: 4
-
-#    Erythrocyte_Thr_thrClot?RBCaggr?:
-#      and:
-#        - 0
-#        - 3
-#        - not: 2
-#        - not: 6
-#    Erythrocyte_ThrClot:
-#      and:
-#        - 0
-#        - 4
-#        - not: 1
-#        - not: 2
-#        - not: 6
-
-# removed
-#    Erythrocyte(s)_ThrClot:
-#      and:
-#        - 0
-#        - 4
-#        - not: 2
-#        - not: 6
-
-# removed
-#    WBC(s)_thrClot:
-#      and:
-#        - 6
-#        - 4
-#        - not: 0
-#        - not: 2
-
-##
-###    Erythrocyte+?:
-###      0
-###    Nucleated_Erythrocyte+?:
-###      1
-###    Thrombocyte+?:
-###      2
-###    Thr_aggr+?:
-###      and: [ 2, 3 ]
-###    WBC_thr+?:
-###      and: [ 4, 2 ]
-###    Erythrocyte_Thr+?:
-###      and: [0, 2]
-##
-#    WBC_aggr+(thr):
-#      and:
-#        - and: [6, 5]
-#        - not: 0
-#       # - not: 1 # not neccessary
-#        - not: 2
-#        - not: 4
 
     WBC_aggr+(thr(s)):
       and:
         - and: [ 6, 5 ]
         - not: 0
         - not: 2
-    #    - not: 4
+
 
 
 
