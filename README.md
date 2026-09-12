@@ -65,7 +65,7 @@ pip install numpy pandas scipy pyyaml python-dotenv mlflow dclab dcnum h5py tabu
 
 ## Setting up the dataset
 
-The accompanying data (in .rtdc format) can be downloaded from [Open Science Framework](https://osf.io/3zkvw/).
+The accompanying data (in `.rtdc` format) can be downloaded from [Open Science Framework](https://osf.io/3zkvw/).
 The rtdc files can be browsed using the [DCscope (formerly Shape-Out)](https://shapeout2.readthedocs.io/) tool.
 
 Place the data in the project folder `data/` (or use another location and pass it via the corresponding arguments when running training or evaluation).
@@ -77,22 +77,26 @@ Run all commands from the project root directory.
 To train the model, run:
 
 ```bash
-python train.py --param_file ./configurations/configuration_file.yaml --data_path ./data/ --data_path_gmm_eval_in ./data/WBCtest_data/ --data_path_gmm_eval_out ./predictions_temp/
+python train.py --param_file ./configurations/configuration_paper_MTL.yaml --data_path ./data/ --data_path_gmm_eval_in ./data/WBCtest_data/ --data_path_gmm_eval_out ./predictions_temp/
 ```
 
-Choose a specific `configuration_file.yaml` from `configurations/`. Each file corresponds to a specific experiment described in the paper. You can create your own configuration file by copying and modifying an existing one.
+You can choose a specific configuration file from `configurations/`. Each file corresponds to a specific experiment described in the paper. You can create your own configuration file by copying and modifying an existing one.
 
 Evaluation on `test_data` and `WBCtest_data` is run automatically after training.
 
 To evaluate an already trained model separately, run:
 
 ```bash
-python evaluate.py --path_in ./data/ --model model_Run_ID --path_in_gmm ./data/WBCtest_data/ --path_out_gmm_pred ./predictions_temp/
+python evaluate.py --path_in ./data/ --model MLFLOW_RUN_ID --path_in_gmm ./data/WBCtest_data/ --path_out_gmm_pred ./predictions_temp/
 ```
 
-`model_Run_ID` is available in the MLflow dashboard. It is also stored in `run_uuid.txt` in the project folder after training.
+`MLFLOW_RUN_ID` is a run ID in the MLflow dashboard. It is also stored after training in `run_uuid.txt` in the project folder.
+The evaluation script currently loads the saved model artifact (*best_model_bal_acc*)  from the specified MLflow run.
 
-Results are tracked in `./mlflowruns/`, as defined in `.env`. You can change the MLflow output path by updating `MLFLOW_TRACKING_URI` in `.env`.
+Results are tracked in the MLflow location defined by MLFLOW_TRACKING_URI in .env (`./mlflowruns/`). If needed, adjust it before running experiments.
+To view the MLflow dashboard, run: `mlflow ui --backend-store-uri ./mlflowruns/` and open the displayed URL in a browser.
+
+```bash
 
 ## Acknowledgments
 
