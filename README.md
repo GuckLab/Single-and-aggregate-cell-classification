@@ -66,7 +66,7 @@ pip install numpy pandas scipy pyyaml python-dotenv mlflow dclab dcnum h5py tabu
 ## Setting up the dataset
 
 The accompanying data (in `.rtdc` format) can be downloaded from [Open Science Framework](https://osf.io/3zkvw/).
-The rtdc files can be browsed using the [DCscope (formerly Shape-Out)](https://shapeout2.readthedocs.io/) tool.
+The `.rtdc` files can be browsed using the [DCscope (formerly Shape-Out)](https://shapeout2.readthedocs.io/) tool.
 
 Place the data in the project folder `data/` (or use another location and pass it via the corresponding arguments when running training or evaluation).
 
@@ -82,7 +82,7 @@ python train.py --param_file ./configurations/configuration_paper_MTL.yaml --dat
 
 You can choose a specific configuration file from `configurations/`. Each file corresponds to a specific experiment described in the paper. You can create your own configuration file by copying and modifying an existing one.
 
-Evaluation on `test_data` and `WBCtest_data` is run automatically after training.
+Evaluation on `test_data` and `WBCtest_data` runs automatically after training.
 
 To evaluate an already trained model separately, run:
 
@@ -93,10 +93,8 @@ python evaluate.py --path_in ./data/ --model MLFLOW_RUN_ID --path_in_gmm ./data/
 `MLFLOW_RUN_ID` is a run ID in the MLflow dashboard. It is also stored after training in `run_uuid.txt` in the project folder.
 The evaluation script currently loads the saved model artifact (*best_model_bal_acc*)  from the specified MLflow run.
 
-Results are tracked in the MLflow location defined by MLFLOW_TRACKING_URI in .env (`./mlflowruns/`). If needed, adjust it before running experiments.
+By default, results are tracked in `./mlflowruns/`, as defined by `MLFLOW_TRACKING_URI` in `.env` file. You can change this location by editing `.env`.
 To view the MLflow dashboard, run: `mlflow ui --backend-store-uri ./mlflowruns/` and open the displayed URL in a browser.
-
-```bash
 
 ## Acknowledgments
 
