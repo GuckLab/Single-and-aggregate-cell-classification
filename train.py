@@ -41,16 +41,16 @@ def set_seed(seed):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--data_path', type=str)
-    parser.add_argument('--param_file', type=str)
+    parser.add_argument('--data_path', type=str, help='Input folder path where rtdc files with training and validation data are stored')
+    parser.add_argument('--param_file', type=str, help='Path to the configuration file')
     parser.add_argument('--data_path_gmm_eval_out', type=str, default="", help='Output folder path where rtdc files with'
-                                                                           ' predictions on GMM data will be saved')
-    parser.add_argument('--data_path_gmm_eval_in', type=str, default="", help='Input folder with GMM rtdc measurements')
+                                                                           ' predictions on WBCTest data will be saved')
+    parser.add_argument('--data_path_gmm_eval_in', type=str, default="", help='Input folder with WBCTest rtdc measurements')
     parser.add_argument('--mlflow_gmm_folder_name', type=str, default="evaluation_on_gmm_measurements",
-                        help='folder name within mlflow where gmm evaluation results will be stored')
-    parser.add_argument('--mlflow', action='store_true', default=True, help='True for model to be saved in mlflow')
+                        help='folder name in mlflow window where WBCTest evaluation results will be stored')
+    parser.add_argument('--mlflow', action='store_true', default=True, help='True for data to be tracked in mlflow')
     parser.add_argument('--seed', type=int, default=0, help='sets seed to make results reproducible')
-    parser.add_argument('--rm_pred', action='store_true', default=False, help='removes folder with predictions after evaluation')
+    parser.add_argument('--rm_pred', action='store_true', default=False, help='removes the data in the folder with WBCtest predictions after evaluation')
 
     args = parser.parse_args()
 
@@ -264,8 +264,8 @@ def main():
 
     if args.data_path_gmm_eval_in:
 
-        # model evaluation on GMM data
-        print("starting evaluation on GMM test dataset")
+        # model evaluation on WBCtest data
+        print("starting evaluation on WBCtest dataset")
 
         evaluate_models_on_gmm(run_id, args.data_path_gmm_eval_in, args.data_path_gmm_eval_out, model_names,
                                remove_predictions=args.rm_pred, mlflow_folder_name=args.mlflow_gmm_folder_name)

@@ -9,15 +9,15 @@ load_dotenv()
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument('--path_in', type=str, help='Input folder path')
-    parser.add_argument('--path_out', type=str, default="", help='Output folder path for predictions on test set')
-    parser.add_argument('--path_in_gmm', type=str, default="", help='Input folder path for GMM test data')
-    parser.add_argument('--path_out_gmm_pred', type=str, default="", help='Output folder path for predictions on GMM set')
+    parser.add_argument('--path_in', type=str, help='Input folder path for test rtdc data')
+    parser.add_argument('--path_out', type=str, default="", help='Output folder path for predictions on the test set')
+    parser.add_argument('--path_in_gmm', type=str, default="", help='Input folder path for WBCtest data')
+    parser.add_argument('--path_out_gmm_pred', type=str, default="", help='Output folder path for predictions on WBCtest set')
     parser.add_argument('--mlflow_gmm_folder_name', type=str, default="evaluation_on_gmm_measurements",
-                        help='folder name within mlflow where gmm evaluation results will be stored')
+                        help='folder name in mlflow window where WBCtest evaluation results will be stored')
     parser.add_argument('--model', type=str, help='model run_id')
     parser.add_argument('--batch_size', action='store_true', default=16)
-    parser.add_argument('--rm_pred', action='store_true', default=False, help='removes folder with predictions after evaluation')
+    parser.add_argument('--rm_pred', action='store_true', default=False, help='removes the data in folder with WBCTest predictions after evaluation')
 
     args = parser.parse_args()
 
@@ -27,7 +27,7 @@ if __name__ == "__main__":
     if args.path_in_gmm:
 
         # model evaluation on GMM data
-        print("starting evaluation on GMM test dataset")
+        print("starting evaluation on WBCtest dataset")
 
         evaluate_models_on_gmm(args.model, args.path_in_gmm, path_out_gmm_pred=args.path_out_gmm_pred,
                                model_names=["best_model_bal_acc"], remove_predictions=args.rm_pred,
