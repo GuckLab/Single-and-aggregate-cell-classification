@@ -103,16 +103,21 @@ def evaluate_models_on_gmm(run_id: str, path_in_gmm: str, path_out_gmm_pred: str
         features = measurements_params["create_trainer"]["ml_score_features"].values()
         ml_score_features = ["ml_score_" + feature for feature in features]
 
-        proportions = measurements_params["gmm_based_evaluation"]["proportions"]
-        not_wbc_props = proportions['notWBC']
-        wbc_props = proportions['WBC']
+
 
         single_cell_mode = measurements_params["gmm_based_evaluation"].get("single_cell", True)
 
         if "full_measurement_label" in measurements_params["gmm_based_evaluation"]:
             full_measurement_label = measurements_params["gmm_based_evaluation"]["full_measurement_label"]
+
+            proportions = measurements_params["gmm_based_evaluation"]["proportions"]
+            not_wbc_props = proportions['notWBC']
+            wbc_props = proportions['WBC']
+
         else:
             full_measurement_label = ""
+            not_wbc_props = None
+            wbc_props = None
 
     else:
         print("no measurements were given to evaluate models on GMM data")

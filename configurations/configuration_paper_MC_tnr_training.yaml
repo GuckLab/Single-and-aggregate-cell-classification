@@ -328,15 +328,15 @@ gmm_based_evaluation:
 
  # full_measurement_label: "Full"
 
-  proportions: # proportions to be computed. Lists should contain names of ml codes
-    notWBC:
-      RBC: [ 'ml_score_rbc',  'ml_score_rbs', 'ml_score_t1r', 'ml_score_tnr']
-      Thrombocytes: ['ml_score_trb', 'ml_score_trs', 'ml_score_t1r', 'ml_score_t1w', 'ml_score_tnr']
-      Nucl_RBC: ['ml_score_rbn']
-    WBC:
-      Neutrophils: [ 'ml_score_g1n' ]
-      Lymphocytes: [ 'ml_score_l10' ]
-      Monocytes: [ 'ml_score_g1m' ]
-      Eosonophils: [ 'ml_score_g1e' ]
-      Basophils: [ 'ml_score_g1b' ]
+#  proportions: # proportions to be computed. Lists should contain names of ml codes
+#    notWBC:
+#      RBC: [ 'ml_score_rbc',  'ml_score_rbs', 'ml_score_t1r', 'ml_score_tnr']
+#      Thrombocytes: ['ml_score_trb', 'ml_score_trs', 'ml_score_t1r', 'ml_score_t1w', 'ml_score_tnr']
+#      Nucl_RBC: ['ml_score_rbn']
+#    WBC:
+#      Neutrophils: [ 'ml_score_g1n' ]
+#      Lymphocytes: [ 'ml_score_l10' ]
+#      Monocytes: [ 'ml_score_g1m' ]
+#      Eosonophils: [ 'ml_score_g1e' ]
+#      Basophils: [ 'ml_score_g1b' ]
 
