@@ -140,19 +140,19 @@ class Trainer:
                                                             "to the number of labels in the configuration file")
 
             if isinstance(task_weights, dict):
-                print("not yet implemented") ## TODO implement this if needed
+                print("not yet implemented")
                 raise
             else:
                 task_weights_tensor = torch.tensor(task_weights)
 
             if isinstance(mtl_mc_weights, dict):
-                print("not yet implemented")  ## TODO implement this if needed
+                print("not yet implemented")
                 raise
             else:
                 mtl_mc_weights_tensor = torch.tensor(mtl_mc_weights)
 
             if isinstance(mc_class_weights, dict):
-                print("not yet implemented")  ## TODO implement this if needed
+                print("not yet implemented")
                 raise
             else:
                 mc_class_weights_tensor = torch.tensor(mc_class_weights)
@@ -216,7 +216,7 @@ class Trainer:
 
             # Define Input
             model_input = batch["image"].to(self.device)
-            # TODO - do I need long() for multiclass? For multitask I do not
+
             target = batch["target"]
             if not self.MTL:
                 target = target.long()
@@ -227,7 +227,6 @@ class Trainer:
             # Get Output
             with torch.set_grad_enabled(True):
                 output = self.get_model_output(model_input)
-                # _, prediction = torch.max(output, 1)
 
                 # Backpropagation Step
                 loss = self.criterion(output, target)

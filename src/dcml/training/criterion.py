@@ -63,7 +63,6 @@ class CELoss_with_costs(_WeightedLoss):
         with np.printoptions(precision=3, suppress=True, linewidth=225):
             logger.info(f"cost matrix:\n {costs}")
 
-        # TODO do I need it here on GPU?
         self.costs = torch.tensor(costs, dtype=torch.float32).to(self.device)
 
     def forward(self, input: Tensor, target: Tensor) -> Tensor:

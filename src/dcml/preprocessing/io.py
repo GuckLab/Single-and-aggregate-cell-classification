@@ -125,7 +125,6 @@ def get_predictions(ds_path: Path,
 
     return prediction_probs
 
-# TODO can be combined with predict_cell_type()
 def predict_cell_type_with_basin(path_in: Union[str, Path],
                                  path_out: Union[str, Path],
                                  # model_path: Union[str, Path],
@@ -277,7 +276,7 @@ def predict_cell_type(path_in: Union[str, Path],
 
     # The following assumes that there was already an RT-DC file at
     # path_out (before background correction) and that it contains ml_scores
-    if cleanup_predictions:  # TODO this part fails to work properly when running in sbatch mode???
+    if cleanup_predictions:  #
         logger.info("cleanup_predictions")
         with h5py.File(path_out, "a") as hf:
             features = list(hf["events"].keys())
@@ -323,15 +322,13 @@ def apply_prediction_to_dir(path_in: Union[str, Path],
                             std=None,
                             brightness_factor=None):
 
-    # TODO should the code in this subfunction be moved into directly to apply_prediction_to_dir?
     def process_file(src, dst, with_basin):
         if dst.exists():
-            # TODO add suffix and continue processing
+
             logger.info(f"{dst} already exists!!! Did not Copy or Process!")
             return False
-        # if src.suffix == '.rtdc':
-            # logger.info(f"Processing file: {src.absolute()}")
-        if compute_locally:  # TODO do I need this?
+
+        if compute_locally:
             # Setting up Path
             src_tmp = Path("tmp_orig.rtdc")
             dst_tmp = Path("tmp_bg_pred.rtdc")
@@ -366,7 +363,7 @@ def apply_prediction_to_dir(path_in: Union[str, Path],
                               )
 
         # copy data from local to dst
-        if compute_locally:  # TODO do I need this?
+        if compute_locally:
             shutil.copyfile(src=dst_tmp, dst=dst)
             src_tmp.unlink()
             dst_tmp.unlink()

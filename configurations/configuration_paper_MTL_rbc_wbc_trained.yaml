@@ -234,7 +234,7 @@ create_trainer:
     10: "l10"
     11: "g1b"
 
-  class_weights: # TODO move it to criterion (used in cross entropy )
+  class_weights:
     0: 1
     1: 1
     2: 1

@@ -33,10 +33,7 @@ def build_model(params, MTL=False):
     return model
 
 def split_script_file(script_file):
-    # TODO: Find a better way to figure out if the script_file contains
-    # only a model or also the transformations
-    # Testing for "Sequential" is not robust enough as it does not uniquely
-    # identify a Sequential of [transform, model]
+
     if script_file.original_name == "Sequential":
         modules = list(script_file.children())
         transform = modules[0]

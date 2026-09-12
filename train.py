@@ -89,7 +89,6 @@ def main():
         print("GPU is not available. Using CPU by default.",
               flush=True)
 
-    # TODO design a function that check all constraints on yaml configuration file, including the one below
     par_check_train = dataset_params.get('unknowns_target_grouping_train_val', None)
     if par_check_train:
         par_check_test = dataset_params.get('unknowns_target_grouping_test')
@@ -151,7 +150,7 @@ def main():
         dataset_train_sampler = create_data_sampler(sampler_type, sampler_weights, num_samples)
         if dataset_train_sampler:
             print(f"Sampler created {time.ctime()}", flush=True)
-            dataset_train_shuffle = False # TODO put here None instead False according to the help for Dataloader
+            dataset_train_shuffle = False
 
     print(f"Create dataloader {time.ctime()}", flush=True)
     dataloader_train = DataLoader(dataset_train,
@@ -246,7 +245,6 @@ def main():
     logger.log_params(params=train_step_metrics, filename="model_epoch_val_performance.yaml")
 
     # save run-uuid for following evaluation
-    # TODO do I need this?
     run_id = logger.active_run.info.run_uuid
     with open('run_uuid.txt', 'w') as file:
         file.write(run_id)

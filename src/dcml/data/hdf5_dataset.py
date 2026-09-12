@@ -189,18 +189,7 @@ class RTDCDataset(torch.utils.data.Dataset):
         return len(self.indexing_array)
 
     def __getitem__(self, idx):
-        # TODO: refactor this for speed. A few suggestions:
-        #  - Try to avoid for-loops
-        #  - Use self.h5data.image instead of self.h5data["image"] for speed
-        #  - Use the self.h5data.image_corr instead of correcting the
-        #    background on-the-fly here.
-        #  - If self.correct_background is set only during init, then maybe
-        #    it makes sense to set `self.image` to `h5data.image` or
-        #    `h5data.image_corr` during init (saves an if-clause)
-        #  - Note that if your indexing array is totally random
-        #    (e.g. for training), then the speed-up might not be so good.
-        #    But if the training data are small (a few 1000's), then we
-        #    could increase the cache_size of dcnum's ImageCache.
+
         _idx = self.indexing_array[idx]
         data = {}
         for key, value in self.required_data.items():
@@ -336,7 +325,7 @@ class RTDCDataset(torch.utils.data.Dataset):
             if getattr(self.h5data.h5, 'tempFile', False):
 
                 temp_file_name = self.h5data.h5.file.filename
-                # TODO consider using only one condition for deletion (tempFile field or '/dcnum_vc_ prefix')
+
                 if ('/dcnum_vc_' in temp_file_name) and os.path.isfile(temp_file_name):
                     logger.info(f"{temp_file_name} is being deleted")
                     #print(f"{temp_file_name} is being deleted")

@@ -64,6 +64,6 @@ class OneModel(BaseModel):
 
         model_input = model_input.to(self.device)
         output = self.model(model_input)
-        output = output.to("cpu").numpy()  # TODO is it needed here?
+        output = output.to("cpu").numpy()
 
         return output

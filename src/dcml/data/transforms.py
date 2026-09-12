@@ -43,7 +43,7 @@ class ApplyNormalize(nn.Module):
         self.std = std
 
     def forward(self, tensor):
-        # TODO: Implement channel-size agnostic version of this method
+
         normalized_tensor = transforms.functional.normalize(tensor,
                                                             [self.mean, ],
                                                             [self.std, ])
