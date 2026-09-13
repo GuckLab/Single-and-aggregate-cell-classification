@@ -77,7 +77,7 @@ Run all commands from the project root directory.
 To train the model, run:
 
 ```bash
-python train.py --param_file ./configurations/configuration_paper_MTL.yaml --data_path ./data/ --data_path_gmm_eval_in ./data/WBCtest_data/ --data_path_gmm_eval_out ./predictions_temp/
+python train.py --param_file ./configurations/configuration_paper_MTL.yaml --data_path ./data/ --data_path_gmm_eval_in ./data/WBCtest/ --data_path_gmm_eval_out ./predictions_temp/
 ```
 
 You can choose a specific configuration file from `configurations/`. Each file corresponds to a specific experiment described in the paper. You can create your own configuration file by copying and modifying an existing one.
@@ -87,7 +87,7 @@ Evaluation on `test_data` and `WBCtest_data` runs automatically after training.
 To evaluate an already trained model separately, run:
 
 ```bash
-python evaluate.py --path_in ./data/ --model MLFLOW_RUN_ID --path_in_gmm ./data/WBCtest_data/ --path_out_gmm_pred ./predictions_temp/
+python evaluate.py --path_in ./data/ --model MLFLOW_RUN_ID --path_in_gmm ./data/WBCtest/ --path_out_gmm_pred ./predictions_temp/
 ```
 
 `MLFLOW_RUN_ID` is a run ID in the MLflow dashboard. It is also stored after training in `run_uuid.txt` in the project folder.
