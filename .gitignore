@@ -1,5 +1,5 @@
 # python-dotenv-files
-.env
+#.env
 
 # virtualenv
 venv/
@@ -7,9 +7,12 @@ venv/
 *.h5~
 
 # Data in the root folder
+/data/*
 /data/test_data/*
 /data/train_data/*
 /data/WBCtest_data/*
+
+!/data/.gitkeep
 
 # Ignore everything in mlflowruns/ folder
 /mlflowruns/*
