@@ -11,6 +11,7 @@ venv/
 /data/test_data/*
 /data/train_data/*
 /data/WBCtest/*
+/predictions_temp/*
 
 !/data/.gitkeep
 
