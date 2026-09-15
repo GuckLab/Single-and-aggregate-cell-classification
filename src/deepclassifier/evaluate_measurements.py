@@ -363,7 +363,7 @@ def evaluate_confusion_on_gmm(measurements: list, ml_score_features: list, cell_
 
     pd.set_option('display.max_columns', None)
     pd.set_option('display.width', 200)
-    print(f"Average confusion matrix over all GMM measurements:\n {percentages_confusion_matrix}")
+    print(f"Average confusion matrix over all WBCtest measurements:\n {percentages_confusion_matrix}")
 
 
     # Save csv file for average confusion matrix

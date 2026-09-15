@@ -26,7 +26,7 @@ if __name__ == "__main__":
 
     if args.path_in_gmm:
 
-        # model evaluation on GMM data
+        # model evaluation on WBCtest data
         print("starting evaluation on WBCtest dataset")
 
         evaluate_models_on_gmm(args.model, args.path_in_gmm, path_out_gmm_pred=args.path_out_gmm_pred,

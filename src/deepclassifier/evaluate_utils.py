@@ -120,7 +120,7 @@ def evaluate_models_on_gmm(run_id: str, path_in_gmm: str, path_out_gmm_pred: str
             wbc_props = None
 
     else:
-        print("no measurements were given to evaluate models on GMM data")
+        print("no measurements were given to evaluate models on WBCtest data")
         return
 
     with mlflow.start_run(run_id=run_id, experiment_id=None, nested=False):
@@ -260,14 +260,12 @@ def model_eval_on_gmm(path_in, path_out, run_id: str, measurements, ml_score_fea
         path_in_measurement = os.path.join(path_in, measurement)
         path_out_measurement = os.path.join(path_out, measurement)
 
-        # Calculate statistics for each measurement (using file with a prefix that corresponds to full measurement)
-        abs_path_files = [os.path.join(path_in_measurement, el) for el in Path(path_in_measurement).rglob(full_measurement_label + "*.rtdc") if el.is_file()]
-
-
+        # Calculate statistics for each measurement using file with a prefix that corresponds to full measurement.
+        # If such a full measurements was not provided use the first .rtdc file in the folder.
+        # The statistics are used for normalization of predictions.
+        abs_path_files = [el for el in Path(path_in_measurement).rglob(full_measurement_label + "*.rtdc") if el.is_file()]
         if abs_path_files:
-            print("measurement file: {}".format(abs_path_files[0]))
-            if len(abs_path_files) > 1:
-                print("a few files with full measurement were found: {}. Using the first one".format(abs_path_files))
+            print("measurement file {} is used for calculation of statistics".format(abs_path_files[0]))
 
             # compute dataset statistics
             dataset = create_single_dataset(
@@ -281,6 +279,7 @@ def model_eval_on_gmm(path_in, path_out, run_id: str, measurements, ml_score_fea
                 MTL=measurements_params["create_trainer"]["architecture"]["type"] == 'multitask'
             )
 
+            # make predictions for all .rtdc files in the folder path_in_measurement
             apply_prediction_to_dir(path_in=path_in_measurement,
                                     path_out=path_out_measurement,
                                     model_path=run_id,
