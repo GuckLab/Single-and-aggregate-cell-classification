@@ -10,7 +10,7 @@ venv/
 /data/*
 /data/test_data/*
 /data/train_data/*
-/data/WBCtest_data/*
+/data/WBCtest/*
 
 !/data/.gitkeep
 
