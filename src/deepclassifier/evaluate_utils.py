@@ -263,6 +263,8 @@ def model_eval_on_gmm(path_in, path_out, run_id: str, measurements, ml_score_fea
         # Calculate statistics for each measurement using file with a prefix that corresponds to full measurement.
         # If such a full measurements was not provided use the first .rtdc file in the folder.
         # The statistics are used for normalization of predictions.
+        # Note: for paper results we used the Full Measurement to calculate statistics -
+        # 'full_measurement_label' and 'proportions' were uncommented in configuration files
         abs_path_files = [el for el in Path(path_in_measurement).rglob(full_measurement_label + "*.rtdc") if el.is_file()]
         if abs_path_files:
             print("measurement file {} is used for calculation of statistics".format(abs_path_files[0]))
