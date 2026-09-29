@@ -63,12 +63,58 @@ pip install torch torchvision
 pip install numpy pandas scipy pyyaml python-dotenv mlflow dclab dcnum h5py tabulate
 ```
 
+### Tested package versions
+
+The code was tested with the following versions:
+
+- `python==3.12.5`
+- `torch==2.4.0+cu124`
+- `torchvision==0.19.0+cu124`
+- `numpy==1.26.3`
+- `pandas==2.2.3`
+- `scipy==1.14.1`
+- `pyyaml==6.0.2`
+- `python-dotenv==1.0.1`
+- `mlflow==2.17.0`
+- `dclab==0.62.1`
+- `dcnum==0.25.3`
+- `h5py==3.11.0`
+- `tabulate==0.9.0`
+
+The tested PyTorch build variant is CUDA 12.4 (`+cu124`).
+
 ## Setting up the dataset
 
 The accompanying data (in `.rtdc` format) can be downloaded from [Open Science Framework](https://osf.io/3zkvw/).
 The `.rtdc` files can be browsed using the [DCscope (formerly Shape-Out)](https://shapeout2.readthedocs.io/) tool.
 
 Place the data in the project folder `data/` (or use another location and pass it via the corresponding arguments when running training or evaluation).
+
+```text
+data/
+├── train_data/
+│   ├── ml_score_g1b/
+│   ├── ml_score_g1e/
+│   ├── ml_score_g1m/
+│   ├── ml_score_g1n/
+│   ├── ml_score_l10/
+│   ├── ...
+│   ├── ml_score_tnr/
+│   ├── ml_score_tns/
+│   └── ml_score_tnw/
+├── test_data/
+│   ├── ml_score_g1b/
+│   ├── ml_score_g1e/
+│   ├── ml_score_g1m/
+│   ├── ml_score_g1n/
+│   ├── ml_score_l10/
+│   ├── ...
+│   ├── ml_score_tns/
+│   ├── ml_score_tnw/
+│   └── ml_score_wn0/
+└── WBCtest/
+	└── measurement/
+```
 
 ## Training and evaluation
 
