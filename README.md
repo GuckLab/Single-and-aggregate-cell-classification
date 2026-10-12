@@ -15,6 +15,7 @@ The paper compares multi-class and multi-label classification approaches and sho
 
 - `train.py` - training entry point
 - `evaluate.py` - evaluation entry point for trained models
+- `make_predictions.py` - prediction entry point for inference on `.rtdc` files without evaluation
 - `configurations/` - YAML configuration files for experiments
 - `src/dcml/` - core package for data handling, modeling, training, and evaluation utilities
 - `src/deepclassifier/` - project-specific helper and evaluation modules
@@ -139,8 +140,20 @@ python evaluate.py --path_in ./data/ --model MLFLOW_RUN_ID --path_in_gmm ./data/
 `MLFLOW_RUN_ID` is a run ID in the MLflow dashboard. It is also stored after training in `run_uuid.txt` in the project folder.
 The evaluation script currently loads the saved model artifact (*best_model_bal_acc*)  from the specified MLflow run.
 
-By default, results are tracked in `./mlflowruns/`, as defined by `MLFLOW_TRACKING_URI` in `.env` file. You can change this location by editing `.env`.
+By default, MLFflow uses `./mlflowruns/` folder to track the results, as defined by `MLFLOW_TRACKING_URI` in `.env` file. You can change this location by editing `.env`.
 To view the MLflow dashboard, run: `mlflow ui --backend-store-uri ./mlflowruns/` and open the displayed URL in a browser.
+
+To generate predictions for all `.rtdc` files in a folder, without running evaluation, use:
+
+```bash
+python make_predictions.py --path_in ./path/to/input_folder/ --path_out ./predictions_temp/ --model MLFLOW_RUN_ID
+```
+
+This script processes all `.rtdc` files under `--path_in` and writes prediction-augmented copies to the corresponding relative path under `--path_out`.
+
+`MLFLOW_RUN_ID` is a run ID in the MLflow dashboard. The script currently loads the saved model artifact `best_model_bal_acc` from the specified MLflow run.
+
+Make sure `--path_out` is different from `--path_in` and is not located inside `--path_in`.
 
 ## Acknowledgments
 
